@@ -11,10 +11,29 @@
 </head>
 <body>
   <div class="scanlines"></div>
-  <div class="app-shell">
+  <section class="intro-screen" id="intro-screen">
+    <div class="intro-noise"></div>
+    <div class="intro-copy">
+      <span class="kicker">MỘT TRÒ CHƠI ĐIỀU TRA NOIR / 1999</span>
+      <h1>HỒ SƠ <em>13</em></h1>
+      <p>Ở thành phố này, mọi vụ án đều để lại một cái bóng.</p>
+      <label for="player-name">Tên điều tra viên</label>
+      <input id="player-name" maxlength="20" placeholder="Nhập tên của bạn..." autocomplete="off">
+      <button class="primary-button" id="start-game">BƯỚC VÀO THÀNH PHỐ <span>→</span></button>
+      <small>Phòng Hồ Sơ Đặc Biệt · Bộ Nội Vụ</small>
+    </div>
+  </section>
+  <section class="briefing-screen hidden" id="briefing-screen">
+    <div class="briefing-window">
+      <div class="briefing-photo">☏</div>
+      <div><span class="panel-index">VĂN PHÒNG CẤP TRÊN / 08:00</span><h2>Ngồi xuống đi, <strong id="briefing-name">điều tra viên</strong>.</h2><p>Thành phố Vạn Phúc đang bước vào mùa mưa năm 1999. Những khu chung cư cũ, nhà nghỉ ven ga và các con hẻm sáng bằng đèn neon là địa bàn của Phòng Hồ Sơ Đặc Biệt.</p><p>Công việc đầu tiên của bạn là điều tra cái chết của Nguyễn Minh, 34 tuổi, được tìm thấy tại phòng 204. Bạn phải khám hiện trường, hỏi người liên quan, ghi bằng chứng và tự quyết định giả thuyết nào đáng tin.</p><p>Hồ sơ địa phương gọi đó là tự sát. Tôi muốn cậu nhìn kỹ hơn. Đừng tin vào thứ được viết sẵn.</p><button class="primary-button" id="accept-case">NHẬN HỒ SƠ #01 <span>→</span></button></div>
+    </div>
+  </section>
+  <div class="app-shell hidden" id="app-shell">
     <header class="topbar">
       <div class="brand"><span class="brand-mark">✦</span><div><span class="eyebrow">PHÒNG HỒ SƠ ĐẶC BIỆT</span><strong>HỒ SƠ <i>13</i></strong></div></div>
       <div class="case-status"><span class="status-dot"></span> VỤ ÁN #01 <b>PHÒNG 204</b></div>
+      <div class="toolbar"><button class="tool-button" id="open-notebook" title="Mở sổ ghi chép">▤ <span>SỔ</span></button><button class="tool-button" id="open-interrogation" title="Đến phòng thẩm vấn">◉ <span>THẨM VẤN</span></button></div>
       <div class="clock"><span>THỨ BA, 12.10.1999</span><strong id="clock">21:10</strong></div>
     </header>
 
@@ -40,7 +59,7 @@
               <div class="pixel-room">
                 <div class="window"><i></i><i></i><span>MƯA</span></div>
                 <div class="curtain"></div><div class="tv"><span>NO SIGNAL</span></div><div class="desk"></div>
-                <div class="body-shape"><span></span></div><div class="rug"></div><div class="door"></div>
+                <div class="pixel-person victim"><span class="person-head"><i></i><b></b></span><span class="person-torso"></span><span class="person-arm arm-left"></span><span class="person-arm arm-right"></span><span class="person-leg leg-left"></span><span class="person-leg leg-right"></span></div><div class="rug"></div><div class="door"></div>
                 <div class="scene-label label-tv">TIVI</div><div class="scene-label label-desk">BÀN LÀM VIỆC</div><div class="scene-label label-body">NẠN NHÂN</div>
               </div>
               <div class="scene-caption"><span>PHÒNG 204 / NHÀ NGHỈ MINH TÂN</span><span>Nhấp vào các điểm có thể tương tác</span></div>
@@ -49,7 +68,7 @@
           </div>
 
           <div class="panel-body hidden" id="interview-panel">
-            <div class="interview-card"><div class="portrait guard">BV</div><div class="interview-copy"><span class="panel-index">NHÂN VẬT / 02</span><h3>Trần Văn Bảo <small>— bảo vệ ca đêm</small></h3><p id="guard-line">"Tôi không rời khỏi phòng trực cả tối. Camera cũng không hỏng, tôi thề."</p><div class="trust-meter"><span>MỨC ĐỘ TIN CẬY</span><div><i id="trust-fill"></i></div><b id="trust-value">42%</b></div></div></div><div class="subhead"><span>PHẢN HỒI CỦA BẠN</span><small>Lời nói dối không đồng nghĩa với tội ác.</small></div><div id="interview-actions" class="dialogue-options"></div><div id="interview-result" class="result-box hidden"></div></div>
+            <div class="interrogation-room"><div class="room-wall"><span class="room-lamp"></span><span class="room-camera">●</span><span class="room-window"></span></div><div class="interrogation-table"></div><div class="interrogation-chair chair-left"></div><div class="interrogation-chair chair-right"></div><span class="room-caption">PHÒNG THẨM VẤN B / GHI ÂM ĐANG BẬT</span></div><div class="interrogation-note">Chọn một nghi phạm bên dưới để bắt đầu cuộc hỏi cung. Mỗi người có một bí mật riêng; lời nói dối của họ không tự động biến họ thành hung thủ.</div><div class="suspect-strip" id="suspect-strip"></div><div class="interview-card"><div class="portrait guard" id="suspect-portrait"><span class="portrait-person"><i class="portrait-head"></i><i class="portrait-neck"></i><i class="portrait-body"></i><i class="portrait-arm"></i><i class="portrait-leg left"></i><i class="portrait-leg right"></i></span></div><div class="interview-copy"><span class="panel-index">NHÂN VẬT / <span id="suspect-number">02</span></span><h3 id="suspect-name">Trần Văn Bảo <small id="suspect-role">— bảo vệ ca đêm</small></h3><p id="guard-line">"Tôi không rời khỏi phòng trực cả tối. Camera cũng không hỏng, tôi thề."</p><div class="trust-meter"><span>MỨC ĐỘ TIN CẬY</span><div><i id="trust-fill"></i></div><b id="trust-value">42%</b></div></div></div><div class="subhead"><span>PHẢN HỒI CỦA BẠN</span><small>Lời nói dối không đồng nghĩa với tội ác.</small></div><div id="interview-actions" class="dialogue-options"></div><div id="interview-result" class="result-box hidden"></div></div>
 
           <div class="panel-body hidden" id="deduce-panel">
             <div class="deduce-intro"><div><span class="panel-index">BẢNG SUY LUẬN / 01</span><h3>Nối những gì bạn tin là có liên quan.</h3></div><button id="clear-links" class="quiet-button">↺ XÓA NỐI</button></div>
