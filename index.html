@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hồ Sơ Đặc Biệt — Phòng 204</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">✦</span><div><span class="eyebrow">PHÒNG HỒ SƠ ĐẶC BIỆT</span><strong>HỒ SƠ <i>13</i></strong></div></div>
+      <div class="case-status"><span class="status-dot"></span> VỤ ÁN #01 <b>PHÒNG 204</b></div>
+      <div class="clock"><span>THỨ BA, 12.10.1999</span><strong id="clock">21:10</strong></div>
+    </header>
+
+    <main>
+      <section class="intro-row">
+        <div><p class="kicker">TẬP TIN ĐANG MỞ / 01</p><h1>Căn phòng <em>204</em></h1><p class="lede">Một căn phòng khóa trái. Một cuộc gọi lúc 22:31. Và một con số xuất hiện ở nơi không nên có.</p></div>
+        <div class="case-note"><span>ĐIỀU TRA VIÊN</span><strong>NGUYỄN AN</strong><small>Ngày thứ 04 tại đơn vị</small></div>
+      </section>
+
+      <nav class="tabs" aria-label="Các giai đoạn điều tra">
+        <button class="tab active" data-panel="explore"><span>01</span> KHÁM PHÁ</button>
+        <button class="tab" data-panel="interview"><span>02</span> THẨM VẤN</button>
+        <button class="tab" data-panel="deduce"><span>03</span> SUY LUẬN <b id="clue-count">0</b></button>
+        <button class="tab" data-panel="conclude"><span>04</span> KẾT LUẬN</button>
+      </nav>
+
+      <div class="content-grid">
+        <section class="main-panel">
+          <div class="panel-head"><div><span class="panel-index">KHU VỰC / 01</span><h2 id="panel-title">Căn phòng 204</h2></div><span class="weather">☔ MƯA NHỎ / 21:10</span></div>
+
+          <div class="panel-body" id="explore-panel">
+            <div class="scene">
+              <div class="pixel-room">
+                <div class="window"><i></i><i></i><span>MƯA</span></div>
+                <div class="curtain"></div><div class="tv"><span>NO SIGNAL</span></div><div class="desk"></div>
+                <div class="body-shape"><span></span></div><div class="rug"></div><div class="door"></div>
+                <div class="scene-label label-tv">TIVI</div><div class="scene-label label-desk">BÀN LÀM VIỆC</div><div class="scene-label label-body">NẠN NHÂN</div>
+              </div>
+              <div class="scene-caption"><span>PHÒNG 204 / NHÀ NGHỈ MINH TÂN</span><span>Nhấp vào các điểm có thể tương tác</span></div>
+            </div>
+            <div class="evidence-list"><div class="subhead"><span>GỢI Ý TRONG PHÒNG</span><small>Không phải mọi thứ đều quan trọng.</small></div><div id="explore-actions" class="action-stack"></div></div>
+          </div>
+
+          <div class="panel-body hidden" id="interview-panel">
+            <div class="interview-card"><div class="portrait guard">BV</div><div class="interview-copy"><span class="panel-index">NHÂN VẬT / 02</span><h3>Trần Văn Bảo <small>— bảo vệ ca đêm</small></h3><p id="guard-line">"Tôi không rời khỏi phòng trực cả tối. Camera cũng không hỏng, tôi thề."</p><div class="trust-meter"><span>MỨC ĐỘ TIN CẬY</span><div><i id="trust-fill"></i></div><b id="trust-value">42%</b></div></div></div><div class="subhead"><span>PHẢN HỒI CỦA BẠN</span><small>Lời nói dối không đồng nghĩa với tội ác.</small></div><div id="interview-actions" class="dialogue-options"></div><div id="interview-result" class="result-box hidden"></div></div>
+
+          <div class="panel-body hidden" id="deduce-panel">
+            <div class="deduce-intro"><div><span class="panel-index">BẢNG SUY LUẬN / 01</span><h3>Nối những gì bạn tin là có liên quan.</h3></div><button id="clear-links" class="quiet-button">↺ XÓA NỐI</button></div>
+            <div class="board" id="board"></div><div id="hypothesis" class="hypothesis">Chọn hai dữ kiện để thử tạo một giả thuyết.</div>
+          </div>
+
+          <div class="panel-body hidden" id="conclude-panel">
+            <div class="conclude-wrap"><div class="stamp">TẠM THỜI</div><span class="panel-index">BÁO CÁO / CHƯA KHÓA</span><h3>Ai đã giết Nguyễn Minh?</h3><p>Hãy nhớ: thành phố sẽ tiếp tục vận hành dựa trên điều bạn viết xuống.</p><div id="suspect-options" class="suspect-grid"></div><button id="submit-conclusion" class="primary-button">ĐÓNG HỒ SƠ <span>→</span></button><div id="conclusion-result" class="result-box hidden"></div></div></div>
+        </section>
+
+        <aside class="notebook">
+          <div class="notebook-head"><div><span class="panel-index">SỔ TAY</span><h2>Những điều đã biết</h2></div><span class="page-number">01 / 04</span></div>
+          <div class="notebook-body"><div class="objective"><span>MỤC TIÊU HIỆN TẠI</span><p>Hiểu chuyện gì đã xảy ra trong phòng 204 trước khi trời sáng.</p></div><div class="known-list" id="known-list"></div><div class="notebook-rule"></div><div class="question-box"><span>CÂU HỎI CỦA BẠN</span><textarea id="question" placeholder="Ai đó đã để lại..." rows="3"></textarea><button id="save-question" class="text-button">+ GHI VÀO SỔ</button></div></div>
+          <div class="notebook-foot"><span>HỒ SƠ #13 / KHÔNG SAO CHÉP</span><span id="day-progress">NGÀY 01 — 21:10</span></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
