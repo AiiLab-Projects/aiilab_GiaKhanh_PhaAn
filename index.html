@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="overrides.css">
+  <link rel="stylesheet" href="interrogation-overrides.css">
 </head>
 <body>
   <div class="scanlines"></div>
@@ -28,6 +30,17 @@
       <div class="briefing-photo">☏</div>
       <div><span class="panel-index">VĂN PHÒNG CẤP TRÊN / 08:00</span><h2>Ngồi xuống đi, <strong id="briefing-name">điều tra viên</strong>.</h2><p>Thành phố Vạn Phúc đang bước vào mùa mưa năm 1999. Những khu chung cư cũ, nhà nghỉ ven ga và các con hẻm sáng bằng đèn neon là địa bàn của Phòng Hồ Sơ Đặc Biệt.</p><p>Công việc đầu tiên của bạn là điều tra cái chết của Nguyễn Minh, 34 tuổi, được tìm thấy tại phòng 204. Bạn phải khám hiện trường, hỏi người liên quan, ghi bằng chứng và tự quyết định giả thuyết nào đáng tin.</p><p>Hồ sơ địa phương gọi đó là tự sát. Tôi muốn cậu nhìn kỹ hơn. Đừng tin vào thứ được viết sẵn.</p><button class="primary-button" id="accept-case">NHẬN HỒ SƠ #01 <span>→</span></button></div>
     </div>
+  </section>
+  <section class="tutorial-screen hidden" id="tutorial-screen">
+    <div class="tutorial-window">
+      <span class="panel-index">HUẤN LUYỆN TẠI HIỆN TRƯỜNG / 01</span>
+      <h2>Ba thao tác để bắt đầu điều tra</h2>
+      <div class="tutorial-steps"><div><b>01</b><strong>Quan sát</strong><p>Bấm vào vật thể hoặc nạn nhân để xem chi tiết. Không phải thứ gì trong phòng cũng là manh mối.</p></div><div><b>02</b><strong>Ghi lại</strong><p>Chọn một gợi ý bên dưới để đưa nó vào sổ tay. Bạn tự quyết định điều gì đáng nhớ.</p></div><div><b>03</b><strong>Suy luận</strong><p>Sang bảng suy luận, chọn hai dữ kiện và nối chúng thành giả thuyết của riêng bạn.</p></div></div>
+      <button class="primary-button" id="finish-tutorial">ĐÃ HIỂU, ĐẾN VĂN PHÒNG <span>→</span></button>
+    </div>
+  </section>
+  <section class="zoom-screen hidden" id="zoom-screen">
+    <div class="zoom-window"><button class="zoom-close" id="close-zoom" aria-label="Đóng phóng to">×</button><div class="zoom-art"><div class="zoom-victim"><span></span><i></i><b></b></div><div class="zoom-light"></div></div><div class="zoom-copy"><span class="panel-index">KHÁM NGHIỆM SƠ BỘ / NẠN NHÂN</span><h2>Nguyễn Minh, 34 tuổi</h2><p>Thi thể nằm nghiêng bên phải, đầu hướng về bàn làm việc. Cổ tay trái có vết bầm hình vòng cung; móng tay không có da lạ.</p><div class="zoom-findings"><span>VẾT THƯƠNG</span><strong>Vết bầm ở cổ tay trái</strong><span>GÓC NHÌN</span><strong>Có thể quan sát rõ cổ tay và cổ áo</strong><span>GHI NHẬN</span><strong>Không thấy hung khí trong tầm tay</strong></div><button class="primary-button" id="record-victim">GHI VÀO SỔ <span>+</span></button></div></div>
   </section>
   <div class="app-shell hidden" id="app-shell">
     <header class="topbar">
@@ -56,12 +69,19 @@
 
           <div class="panel-body" id="explore-panel">
             <div class="scene">
+              <div class="scene-briefing"><span class="panel-index">MÔ TẢ HIỆN TRƯỜNG</span><strong>NGHI ÁN ÁM SÁT / PHÒNG 204</strong><p>Nguyễn Minh được phát hiện nằm bên cạnh bàn làm việc lúc 22:46. Cửa phòng khóa từ bên trong, đồ đạc không bị xáo trộn, nhưng cơ thể có dấu hiệu bị khống chế trước khi tử vong.</p></div>
               <div class="pixel-room">
+                <div class="wall-depth" aria-hidden="true"></div><div class="floor-depth" aria-hidden="true"></div>
                 <div class="window"><i></i><i></i><span>MƯA</span></div>
-                <div class="curtain"></div><div class="tv"><span>NO SIGNAL</span></div><div class="desk"></div>
-                <div class="pixel-person victim"><span class="person-head"><i></i><b></b></span><span class="person-torso"></span><span class="person-arm arm-left"></span><span class="person-arm arm-right"></span><span class="person-leg leg-left"></span><span class="person-leg leg-right"></span></div><div class="rug"></div><div class="door"></div>
+                <div class="curtain"></div><div class="small-lamp"></div><div class="wall-painting"></div><div class="wardrobe"></div><div class="bed"><span></span></div><div class="chair"></div><div class="tv"><span>NO SIGNAL</span></div><div class="desk"></div>
+                <div class="desk-lamp" aria-hidden="true"></div><div class="desk-papers" aria-hidden="true"><i></i><i></i><i></i></div><div class="desk-radio" aria-hidden="true"><i></i></div><div class="desk-phone" aria-hidden="true"><i></i></div><div class="loose-photo" aria-hidden="true"></div><div class="wall-number" aria-hidden="true">13</div><div class="scattered-paper" aria-hidden="true"></div><div class="foreground-shadow" aria-hidden="true"></div>
+                <div class="pixel-person victim" aria-hidden="true"><span class="person-head"><i></i><b></b></span><span class="person-neck"></span><span class="person-torso"></span><span class="person-arm arm-left"></span><span class="person-arm arm-right"></span><span class="person-hand hand-left"></span><span class="person-hand hand-right"></span><span class="person-leg leg-left"></span><span class="person-leg leg-right"></span><span class="person-shoe shoe-left"></span><span class="person-shoe shoe-right"></span><i class="wrist-bruising" aria-hidden="true"></i><i class="arm-scratches" aria-hidden="true"></i></div><div class="rug"></div><div class="door"></div>
+                <div class="detective" id="detective" role="img" aria-label="Điều tra viên"><span class="detective-shadow"></span><span class="detective-coat"></span><span class="detective-head"><i></i></span><span class="detective-hat"></span><span class="detective-leg leg-a"></span><span class="detective-leg leg-b"></span></div>
+                <button class="proximity-action hidden" id="proximity-action" type="button" aria-label="Tương tác với vật thể gần nhất"></button>
+                <button class="scene-hotspot hotspot-window" data-evidence="window" aria-label="Kiểm tra cửa sổ" title="Cửa sổ"></button><button class="scene-hotspot hotspot-receipt" data-evidence="receipt" aria-label="Kiểm tra giấy tờ trên bàn" title="Giấy tờ"></button><button class="scene-hotspot hotspot-radio" data-evidence="radio" aria-label="Kiểm tra radio" title="Radio"></button><button class="scene-hotspot hotspot-shoe" data-evidence="shoe" aria-label="Kiểm tra vết giày cạnh bàn" title="Vết giày"></button><button class="scene-hotspot hotspot-phone" data-evidence="phone" aria-label="Kiểm tra điện thoại" title="Điện thoại"></button><button class="scene-hotspot hotspot-number" data-evidence="number" aria-label="Kiểm tra con số trên tường" title="Con số 13"></button>
                 <div class="scene-label label-tv">TIVI</div><div class="scene-label label-desk">BÀN LÀM VIỆC</div><div class="scene-label label-body">NẠN NHÂN</div>
               </div>
+              <div class="scene-readout" id="scene-readout" role="status" aria-live="polite"><span>QUAN SÁT</span><strong>Chọn vật thể trong phòng để kiểm tra.</strong></div>
               <div class="scene-caption"><span>PHÒNG 204 / NHÀ NGHỈ MINH TÂN</span><span>Nhấp vào các điểm có thể tương tác</span></div>
             </div>
             <div class="evidence-list"><div class="subhead"><span>GỢI Ý TRONG PHÒNG</span><small>Không phải mọi thứ đều quan trọng.</small></div><div id="explore-actions" class="action-stack"></div></div>
