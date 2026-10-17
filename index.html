@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="overrides.css">
   <link rel="stylesheet" href="interrogation-overrides.css">
+  <link rel="stylesheet" href="ballroom-case.css">
 </head>
 <body>
   <div class="scanlines"></div>
@@ -46,7 +47,7 @@
     <header class="topbar">
       <div class="brand"><span class="brand-mark">✦</span><div><span class="eyebrow">PHÒNG HỒ SƠ ĐẶC BIỆT</span><strong>HỒ SƠ <i>13</i></strong></div></div>
       <div class="case-status"><span class="status-dot"></span> VỤ ÁN #01 <b>PHÒNG 204</b></div>
-      <div class="toolbar"><button class="tool-button" id="open-notebook" title="Mở sổ ghi chép">▤ <span>SỔ</span></button><button class="tool-button" id="open-interrogation" title="Đến phòng thẩm vấn">◉ <span>THẨM VẤN</span></button></div>
+      <div class="toolbar"><button class="tool-button" id="open-notebook" title="Mở sổ ghi chép">▤ <span>SỔ</span></button><button class="tool-button" id="open-interrogation" title="Đến phòng thẩm vấn">◉ <span>THẨM VẤN</span></button><button class="tool-button ballroom-open" id="open-ballroom-case" title="Mở hồ sơ vụ án sảnh tiệc">✦ <span>HỒ SƠ #02</span></button></div>
       <div class="clock"><span>THỨ BA, 12.10.1999</span><strong id="clock">21:10</strong></div>
     </header>
 
@@ -107,6 +108,37 @@
       </div>
     </main>
   </div>
+  <section class="ballroom-overlay hidden" id="ballroom-case" aria-labelledby="ballroom-title" aria-modal="true" role="dialog">
+    <header class="ballroom-header">
+      <div class="ballroom-brand"><span class="ballroom-mark">✦</span><div><span>HỒ SƠ ĐẶC BIỆT / VỤ ÁN #02</span><h1 id="ballroom-title">Đêm cuối tại <em>Vạn Hoa</em></h1></div></div>
+      <div class="ballroom-clock"><span>ĐỊA ĐIỂM / KHÁCH SẠN VẠN HOA</span><strong>22:15</strong></div>
+      <button class="ballroom-close" id="close-ballroom-case" type="button" aria-label="Đóng hồ sơ">× <span>ĐÓNG HỒ SƠ</span></button>
+    </header>
+    <div class="ballroom-layout">
+      <main class="ballroom-scene-column">
+        <div class="ballroom-brief"><span>HIỆN TRƯỜNG / SẢNH DẠ TIỆC</span><strong>ÁN MẠNG GIỮA ĐÊM GÂY QUỸ</strong><p>Nhà tài trợ Dương Khải được tìm thấy bất tỉnh trên thảm đỏ khi buổi tiệc đang diễn ra. Ban nhạc vừa dừng chơi; khách mời nói rằng không ai rời khỏi sảnh.</p></div>
+        <div class="ballroom-scene" id="ballroom-scene" role="group" aria-label="Hiện trường pixel art: sảnh tiệc với sân khấu và nạn nhân trên thảm đỏ">
+          <div class="ballroom-ceiling"></div><div class="ballroom-wall"></div><div class="ballroom-floor"></div><div class="ballroom-carpet"></div><div class="ballroom-stage"><div class="stage-curtain"></div><div class="stage-curtain-side left"></div><div class="stage-curtain-side right"></div><div class="stage-lights"></div><div class="stage-platform"></div><div class="stage-mic"></div><div class="stage-drum"><i></i><b></b></div><div class="stage-piano"></div><div class="stage-caption">VẠN HOA · ĐÊM GÂY QUỸ</div></div>
+          <div class="ballroom-balcony balcony-left"></div><div class="ballroom-balcony balcony-right"></div><div class="ballroom-column column-left"></div><div class="ballroom-column column-right"></div>
+          <div class="chandelier chandelier-left"><i></i></div><div class="chandelier chandelier-right"><i></i></div>
+          <div class="buffet buffet-left"><i></i><b></b><span></span></div><div class="buffet buffet-right"><i></i><b></b><span></span></div>
+          <div class="round-table round-table-left"><i></i><b></b><span></span></div><div class="round-table round-table-right"><i></i><b></b><span></span></div>
+          <div class="ballroom-guest guest-1"></div><div class="ballroom-guest guest-2"></div><div class="ballroom-guest guest-3"></div><div class="ballroom-guest guest-4"></div><div class="ballroom-guest guest-5"></div><div class="ballroom-guest guest-6"></div><div class="ballroom-guest guest-7"></div><div class="ballroom-guest guest-8"></div><div class="ballroom-guest guest-9"></div><div class="ballroom-guest guest-10"></div><div class="ballroom-guest guest-11"></div><div class="ballroom-guest guest-12"></div>
+          <div class="ballroom-victim"><i></i><b></b><span></span></div><div class="crime-marker">!</div><div class="cordon cordon-left"></div><div class="cordon cordon-right"></div>
+          <button class="ballroom-hotspot spot-body" type="button" data-ballroom-clue="victim" aria-label="Kiểm tra nạn nhân"></button><button class="ballroom-hotspot spot-glass" type="button" data-ballroom-clue="glass" aria-label="Kiểm tra ly pha lê cạnh bàn"></button><button class="ballroom-hotspot spot-mic" type="button" data-ballroom-clue="microphone" aria-label="Kiểm tra micro trên sân khấu"></button><button class="ballroom-hotspot spot-card" type="button" data-ballroom-clue="placecard" aria-label="Kiểm tra thẻ chỗ ngồi"></button><button class="ballroom-hotspot spot-curtain" type="button" data-ballroom-clue="curtain" aria-label="Kiểm tra cánh gà sân khấu"></button><button class="ballroom-hotspot spot-footprint" type="button" data-ballroom-clue="footprint" aria-label="Kiểm tra dấu giày trên thảm"></button>
+          <div class="ballroom-scene-tag">SẢNH TIỆC / 22:15 <span>CHỌN ĐIỂM SÁNG ĐỂ KIỂM TRA</span></div>
+        </div>
+        <div class="ballroom-readout" id="ballroom-readout" role="status" aria-live="polite"><span>QUAN SÁT HIỆN TRƯỜNG</span><strong>Đội điều tra đã phong tỏa sảnh. Hãy kiểm tra các điểm nghi vấn.</strong></div>
+      </main>
+      <aside class="ballroom-notebook">
+        <nav class="ballroom-tabs" aria-label="Các bước điều tra vụ án sảnh tiệc"><button class="active" type="button" data-ballroom-tab="clues">MANH MỐI <b id="ballroom-clue-count">0/6</b></button><button type="button" data-ballroom-tab="interview">NHÂN CHỨNG</button><button type="button" data-ballroom-tab="conclusion">KẾT LUẬN</button></nav>
+        <section class="ballroom-panel" data-ballroom-panel="clues"><span class="ballroom-panel-kicker">HỒ SƠ #02 / GHI CHÉP</span><h2>Dương Khải, 41 tuổi</h2><p class="ballroom-victim-note">Nhà tài trợ chính của buổi tiệc. Được phát hiện trên thảm đỏ lúc 22:15, ngay trước màn phát biểu.</p><div class="ballroom-clue-list" id="ballroom-clue-list"></div></section>
+        <section class="ballroom-panel hidden" data-ballroom-panel="interview"><span class="ballroom-panel-kicker">LỜI KHAI / ĐỐI CHIẾU</span><h2>Người có mặt trong sảnh</h2><div class="ballroom-suspects" id="ballroom-suspects"></div><div class="ballroom-testimony" id="ballroom-testimony" aria-live="polite">Chọn một người để nghe lời khai.</div></section>
+        <section class="ballroom-panel hidden" data-ballroom-panel="conclusion"><span class="ballroom-panel-kicker">BÁO CÁO / HỒ SƠ #02</span><h2>Ai đã hạ độc Dương Khải?</h2><p>Chọn người bạn cho là đã ra tay, dựa trên bằng chứng và lời khai.</p><div class="ballroom-accusations" id="ballroom-accusations"></div><button class="ballroom-submit" id="ballroom-submit" type="button">KHÓA KẾT LUẬN <span>→</span></button><div class="ballroom-result hidden" id="ballroom-result" role="status"></div></section>
+      </aside>
+    </div>
+  </section>
   <script src="main.js"></script>
+  <script src="ballroom-case.js"></script>
 </body>
 </html>
