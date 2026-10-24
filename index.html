@@ -1,144 +1,28 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hồ Sơ Đặc Biệt — Phòng 204</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hồ Sơ 13 — Phá Án</title>
+  <meta name="description" content="Trò chơi trinh thám pixel: chọn hồ sơ, khám nghiệm hiện trường, thẩm vấn nghi phạm và lập luận để tìm hung thủ.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="overrides.css">
-  <link rel="stylesheet" href="interrogation-overrides.css">
-  <link rel="stylesheet" href="ballroom-case.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="css/game.css">
 </head>
 <body>
-  <div class="scanlines"></div>
-  <section class="intro-screen" id="intro-screen">
-    <div class="intro-noise"></div>
-    <div class="intro-copy">
-      <span class="kicker">MỘT TRÒ CHƠI ĐIỀU TRA NOIR / 1999</span>
-      <h1>HỒ SƠ <em>13</em></h1>
-      <p>Ở thành phố này, mọi vụ án đều để lại một cái bóng.</p>
-      <label for="player-name">Tên điều tra viên</label>
-      <input id="player-name" maxlength="20" placeholder="Nhập tên của bạn..." autocomplete="off">
-      <button class="primary-button" id="start-game">BƯỚC VÀO THÀNH PHỐ <span>→</span></button>
-      <small>Phòng Hồ Sơ Đặc Biệt · Bộ Nội Vụ</small>
-    </div>
-  </section>
-  <section class="briefing-screen hidden" id="briefing-screen">
-    <div class="briefing-window">
-      <div class="briefing-photo">☏</div>
-      <div><span class="panel-index">VĂN PHÒNG CẤP TRÊN / 08:00</span><h2>Ngồi xuống đi, <strong id="briefing-name">điều tra viên</strong>.</h2><p>Thành phố Vạn Phúc đang bước vào mùa mưa năm 1999. Những khu chung cư cũ, nhà nghỉ ven ga và các con hẻm sáng bằng đèn neon là địa bàn của Phòng Hồ Sơ Đặc Biệt.</p><p>Công việc đầu tiên của bạn là điều tra cái chết của Nguyễn Minh, 34 tuổi, được tìm thấy tại phòng 204. Bạn phải khám hiện trường, hỏi người liên quan, ghi bằng chứng và tự quyết định giả thuyết nào đáng tin.</p><p>Hồ sơ địa phương gọi đó là tự sát. Tôi muốn cậu nhìn kỹ hơn. Đừng tin vào thứ được viết sẵn.</p><button class="primary-button" id="accept-case">NHẬN HỒ SƠ #01 <span>→</span></button></div>
-    </div>
-  </section>
-  <section class="tutorial-screen hidden" id="tutorial-screen">
-    <div class="tutorial-window">
-      <span class="panel-index">HUẤN LUYỆN TẠI HIỆN TRƯỜNG / 01</span>
-      <h2>Ba thao tác để bắt đầu điều tra</h2>
-      <div class="tutorial-steps"><div><b>01</b><strong>Quan sát</strong><p>Bấm vào vật thể hoặc nạn nhân để xem chi tiết. Không phải thứ gì trong phòng cũng là manh mối.</p></div><div><b>02</b><strong>Ghi lại</strong><p>Chọn một gợi ý bên dưới để đưa nó vào sổ tay. Bạn tự quyết định điều gì đáng nhớ.</p></div><div><b>03</b><strong>Suy luận</strong><p>Sang bảng suy luận, chọn hai dữ kiện và nối chúng thành giả thuyết của riêng bạn.</p></div></div>
-      <button class="primary-button" id="finish-tutorial">ĐÃ HIỂU, ĐẾN VĂN PHÒNG <span>→</span></button>
-    </div>
-  </section>
-  <section class="zoom-screen hidden" id="zoom-screen">
-    <div class="zoom-window"><button class="zoom-close" id="close-zoom" aria-label="Đóng phóng to">×</button><div class="zoom-art"><div class="zoom-victim"><span></span><i></i><b></b></div><div class="zoom-light"></div></div><div class="zoom-copy"><span class="panel-index">KHÁM NGHIỆM SƠ BỘ / NẠN NHÂN</span><h2>Nguyễn Minh, 34 tuổi</h2><p>Thi thể nằm nghiêng bên phải, đầu hướng về bàn làm việc. Cổ tay trái có vết bầm hình vòng cung; móng tay không có da lạ.</p><div class="zoom-findings"><span>VẾT THƯƠNG</span><strong>Vết bầm ở cổ tay trái</strong><span>GÓC NHÌN</span><strong>Có thể quan sát rõ cổ tay và cổ áo</strong><span>GHI NHẬN</span><strong>Không thấy hung khí trong tầm tay</strong></div><button class="primary-button" id="record-victim">GHI VÀO SỔ <span>+</span></button></div></div>
-  </section>
-  <div class="app-shell hidden" id="app-shell">
-    <header class="topbar">
-      <div class="brand"><span class="brand-mark">✦</span><div><span class="eyebrow">PHÒNG HỒ SƠ ĐẶC BIỆT</span><strong>HỒ SƠ <i>13</i></strong></div></div>
-      <div class="case-status"><span class="status-dot"></span> VỤ ÁN #01 <b>PHÒNG 204</b></div>
-      <div class="toolbar"><button class="tool-button" id="open-notebook" title="Mở sổ ghi chép">▤ <span>SỔ</span></button><button class="tool-button" id="open-interrogation" title="Đến phòng thẩm vấn">◉ <span>THẨM VẤN</span></button><button class="tool-button ballroom-open" id="open-ballroom-case" title="Mở hồ sơ vụ án sảnh tiệc">✦ <span>HỒ SƠ #02</span></button></div>
-      <div class="clock"><span>THỨ BA, 12.10.1999</span><strong id="clock">21:10</strong></div>
-    </header>
+  <div id="root"></div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
 
-    <main>
-      <section class="intro-row">
-        <div><p class="kicker">TẬP TIN ĐANG MỞ / 01</p><h1>Căn phòng <em>204</em></h1><p class="lede">Một căn phòng khóa trái. Một cuộc gọi lúc 22:31. Và một con số xuất hiện ở nơi không nên có.</p></div>
-        <div class="case-note"><span>ĐIỀU TRA VIÊN</span><strong>NGUYỄN AN</strong><small>Ngày thứ 04 tại đơn vị</small></div>
-      </section>
-
-      <nav class="tabs" aria-label="Các giai đoạn điều tra">
-        <button class="tab active" data-panel="explore"><span>01</span> KHÁM PHÁ</button>
-        <button class="tab" data-panel="interview"><span>02</span> THẨM VẤN</button>
-        <button class="tab" data-panel="deduce"><span>03</span> SUY LUẬN <b id="clue-count">0</b></button>
-        <button class="tab" data-panel="conclude"><span>04</span> KẾT LUẬN</button>
-      </nav>
-
-      <div class="content-grid">
-        <section class="main-panel">
-          <div class="panel-head"><div><span class="panel-index">KHU VỰC / 01</span><h2 id="panel-title">Căn phòng 204</h2></div><span class="weather">☔ MƯA NHỎ / 21:10</span></div>
-
-          <div class="panel-body" id="explore-panel">
-            <div class="scene">
-              <div class="scene-briefing"><span class="panel-index">MÔ TẢ HIỆN TRƯỜNG</span><strong>NGHI ÁN ÁM SÁT / PHÒNG 204</strong><p>Nguyễn Minh được phát hiện nằm bên cạnh bàn làm việc lúc 22:46. Cửa phòng khóa từ bên trong, đồ đạc không bị xáo trộn, nhưng cơ thể có dấu hiệu bị khống chế trước khi tử vong.</p></div>
-              <div class="pixel-room">
-                <div class="wall-depth" aria-hidden="true"></div><div class="floor-depth" aria-hidden="true"></div>
-                <div class="window"><i></i><i></i><span>MƯA</span></div>
-                <div class="curtain"></div><div class="small-lamp"></div><div class="wall-painting"></div><div class="wardrobe"></div><div class="bed"><span></span></div><div class="chair"></div><div class="tv"><span>NO SIGNAL</span></div><div class="desk"></div>
-                <div class="desk-lamp" aria-hidden="true"></div><div class="desk-papers" aria-hidden="true"><i></i><i></i><i></i></div><div class="desk-radio" aria-hidden="true"><i></i></div><div class="desk-phone" aria-hidden="true"><i></i></div><div class="loose-photo" aria-hidden="true"></div><div class="wall-number" aria-hidden="true">13</div><div class="scattered-paper" aria-hidden="true"></div><div class="foreground-shadow" aria-hidden="true"></div>
-                <div class="pixel-person victim" aria-hidden="true"><span class="person-head"><i></i><b></b></span><span class="person-neck"></span><span class="person-torso"></span><span class="person-arm arm-left"></span><span class="person-arm arm-right"></span><span class="person-hand hand-left"></span><span class="person-hand hand-right"></span><span class="person-leg leg-left"></span><span class="person-leg leg-right"></span><span class="person-shoe shoe-left"></span><span class="person-shoe shoe-right"></span><i class="wrist-bruising" aria-hidden="true"></i><i class="arm-scratches" aria-hidden="true"></i></div><div class="rug"></div><div class="door"></div>
-                <div class="detective" id="detective" role="img" aria-label="Điều tra viên"><span class="detective-shadow"></span><span class="detective-coat"></span><span class="detective-head"><i></i></span><span class="detective-hat"></span><span class="detective-leg leg-a"></span><span class="detective-leg leg-b"></span></div>
-                <button class="proximity-action hidden" id="proximity-action" type="button" aria-label="Tương tác với vật thể gần nhất"></button>
-                <button class="scene-hotspot hotspot-window" data-evidence="window" aria-label="Kiểm tra cửa sổ" title="Cửa sổ"></button><button class="scene-hotspot hotspot-receipt" data-evidence="receipt" aria-label="Kiểm tra giấy tờ trên bàn" title="Giấy tờ"></button><button class="scene-hotspot hotspot-radio" data-evidence="radio" aria-label="Kiểm tra radio" title="Radio"></button><button class="scene-hotspot hotspot-shoe" data-evidence="shoe" aria-label="Kiểm tra vết giày cạnh bàn" title="Vết giày"></button><button class="scene-hotspot hotspot-phone" data-evidence="phone" aria-label="Kiểm tra điện thoại" title="Điện thoại"></button><button class="scene-hotspot hotspot-number" data-evidence="number" aria-label="Kiểm tra con số trên tường" title="Con số 13"></button>
-                <div class="scene-label label-tv">TIVI</div><div class="scene-label label-desk">BÀN LÀM VIỆC</div><div class="scene-label label-body">NẠN NHÂN</div>
-              </div>
-              <div class="scene-readout" id="scene-readout" role="status" aria-live="polite"><span>QUAN SÁT</span><strong>Chọn vật thể trong phòng để kiểm tra.</strong></div>
-              <div class="scene-caption"><span>PHÒNG 204 / NHÀ NGHỈ MINH TÂN</span><span>Nhấp vào các điểm có thể tương tác</span></div>
-            </div>
-            <div class="evidence-list"><div class="subhead"><span>GỢI Ý TRONG PHÒNG</span><small>Không phải mọi thứ đều quan trọng.</small></div><div id="explore-actions" class="action-stack"></div></div>
-          </div>
-
-          <div class="panel-body hidden" id="interview-panel">
-            <div class="interrogation-room"><div class="room-wall"><span class="room-lamp"></span><span class="room-camera">●</span><span class="room-window"></span></div><div class="interrogation-table"></div><div class="interrogation-chair chair-left"></div><div class="interrogation-chair chair-right"></div><span class="room-caption">PHÒNG THẨM VẤN B / GHI ÂM ĐANG BẬT</span></div><div class="interrogation-note">Chọn một nghi phạm bên dưới để bắt đầu cuộc hỏi cung. Mỗi người có một bí mật riêng; lời nói dối của họ không tự động biến họ thành hung thủ.</div><div class="suspect-strip" id="suspect-strip"></div><div class="interview-card"><div class="portrait guard" id="suspect-portrait"><span class="portrait-person"><i class="portrait-head"></i><i class="portrait-neck"></i><i class="portrait-body"></i><i class="portrait-arm"></i><i class="portrait-leg left"></i><i class="portrait-leg right"></i></span></div><div class="interview-copy"><span class="panel-index">NHÂN VẬT / <span id="suspect-number">02</span></span><h3 id="suspect-name">Trần Văn Bảo <small id="suspect-role">— bảo vệ ca đêm</small></h3><p id="guard-line">"Tôi không rời khỏi phòng trực cả tối. Camera cũng không hỏng, tôi thề."</p><div class="trust-meter"><span>MỨC ĐỘ TIN CẬY</span><div><i id="trust-fill"></i></div><b id="trust-value">42%</b></div></div></div><div class="subhead"><span>PHẢN HỒI CỦA BẠN</span><small>Lời nói dối không đồng nghĩa với tội ác.</small></div><div id="interview-actions" class="dialogue-options"></div><div id="interview-result" class="result-box hidden"></div></div>
-
-          <div class="panel-body hidden" id="deduce-panel">
-            <div class="deduce-intro"><div><span class="panel-index">BẢNG SUY LUẬN / 01</span><h3>Nối những gì bạn tin là có liên quan.</h3></div><button id="clear-links" class="quiet-button">↺ XÓA NỐI</button></div>
-            <div class="board" id="board"></div><div id="hypothesis" class="hypothesis">Chọn hai dữ kiện để thử tạo một giả thuyết.</div>
-          </div>
-
-          <div class="panel-body hidden" id="conclude-panel">
-            <div class="conclude-wrap"><div class="stamp">TẠM THỜI</div><span class="panel-index">BÁO CÁO / CHƯA KHÓA</span><h3>Ai đã giết Nguyễn Minh?</h3><p>Hãy nhớ: thành phố sẽ tiếp tục vận hành dựa trên điều bạn viết xuống.</p><div id="suspect-options" class="suspect-grid"></div><button id="submit-conclusion" class="primary-button">ĐÓNG HỒ SƠ <span>→</span></button><div id="conclusion-result" class="result-box hidden"></div></div></div>
-        </section>
-
-        <aside class="notebook">
-          <div class="notebook-head"><div><span class="panel-index">SỔ TAY</span><h2>Những điều đã biết</h2></div><span class="page-number">01 / 04</span></div>
-          <div class="notebook-body"><div class="objective"><span>MỤC TIÊU HIỆN TẠI</span><p>Hiểu chuyện gì đã xảy ra trong phòng 204 trước khi trời sáng.</p></div><div class="known-list" id="known-list"></div><div class="notebook-rule"></div><div class="question-box"><span>CÂU HỎI CỦA BẠN</span><textarea id="question" placeholder="Ai đó đã để lại..." rows="3"></textarea><button id="save-question" class="text-button">+ GHI VÀO SỔ</button></div></div>
-          <div class="notebook-foot"><span>HỒ SƠ #13 / KHÔNG SAO CHÉP</span><span id="day-progress">NGÀY 01 — 21:10</span></div>
-        </aside>
-      </div>
-    </main>
-  </div>
-  <section class="ballroom-overlay hidden" id="ballroom-case" aria-labelledby="ballroom-title" aria-modal="true" role="dialog">
-    <header class="ballroom-header">
-      <div class="ballroom-brand"><span class="ballroom-mark">✦</span><div><span>HỒ SƠ ĐẶC BIỆT / VỤ ÁN #02</span><h1 id="ballroom-title">Đêm cuối tại <em>Vạn Hoa</em></h1></div></div>
-      <div class="ballroom-clock"><span>ĐỊA ĐIỂM / KHÁCH SẠN VẠN HOA</span><strong>22:15</strong></div>
-      <button class="ballroom-close" id="close-ballroom-case" type="button" aria-label="Đóng hồ sơ">× <span>ĐÓNG HỒ SƠ</span></button>
-    </header>
-    <div class="ballroom-layout">
-      <main class="ballroom-scene-column">
-        <div class="ballroom-brief"><span>HIỆN TRƯỜNG / SẢNH DẠ TIỆC</span><strong>ÁN MẠNG GIỮA ĐÊM GÂY QUỸ</strong><p>Nhà tài trợ Dương Khải được tìm thấy bất tỉnh trên thảm đỏ khi buổi tiệc đang diễn ra. Ban nhạc vừa dừng chơi; khách mời nói rằng không ai rời khỏi sảnh.</p></div>
-        <div class="ballroom-scene" id="ballroom-scene" role="group" aria-label="Hiện trường pixel art: sảnh tiệc với sân khấu và nạn nhân trên thảm đỏ">
-          <div class="ballroom-ceiling"></div><div class="ballroom-wall"></div><div class="ballroom-floor"></div><div class="ballroom-carpet"></div><div class="ballroom-stage"><div class="stage-curtain"></div><div class="stage-curtain-side left"></div><div class="stage-curtain-side right"></div><div class="stage-lights"></div><div class="stage-platform"></div><div class="stage-mic"></div><div class="stage-drum"><i></i><b></b></div><div class="stage-piano"></div><div class="stage-caption">VẠN HOA · ĐÊM GÂY QUỸ</div></div>
-          <div class="ballroom-balcony balcony-left"></div><div class="ballroom-balcony balcony-right"></div><div class="ballroom-column column-left"></div><div class="ballroom-column column-right"></div>
-          <div class="chandelier chandelier-left"><i></i></div><div class="chandelier chandelier-right"><i></i></div>
-          <div class="buffet buffet-left"><i></i><b></b><span></span></div><div class="buffet buffet-right"><i></i><b></b><span></span></div>
-          <div class="round-table round-table-left"><i></i><b></b><span></span></div><div class="round-table round-table-right"><i></i><b></b><span></span></div>
-          <div class="ballroom-guest guest-1"></div><div class="ballroom-guest guest-2"></div><div class="ballroom-guest guest-3"></div><div class="ballroom-guest guest-4"></div><div class="ballroom-guest guest-5"></div><div class="ballroom-guest guest-6"></div><div class="ballroom-guest guest-7"></div><div class="ballroom-guest guest-8"></div><div class="ballroom-guest guest-9"></div><div class="ballroom-guest guest-10"></div><div class="ballroom-guest guest-11"></div><div class="ballroom-guest guest-12"></div>
-          <div class="ballroom-victim"><i></i><b></b><span></span></div><div class="crime-marker">!</div><div class="cordon cordon-left"></div><div class="cordon cordon-right"></div>
-          <button class="ballroom-hotspot spot-body" type="button" data-ballroom-clue="victim" aria-label="Kiểm tra nạn nhân"></button><button class="ballroom-hotspot spot-glass" type="button" data-ballroom-clue="glass" aria-label="Kiểm tra ly pha lê cạnh bàn"></button><button class="ballroom-hotspot spot-mic" type="button" data-ballroom-clue="microphone" aria-label="Kiểm tra micro trên sân khấu"></button><button class="ballroom-hotspot spot-card" type="button" data-ballroom-clue="placecard" aria-label="Kiểm tra thẻ chỗ ngồi"></button><button class="ballroom-hotspot spot-curtain" type="button" data-ballroom-clue="curtain" aria-label="Kiểm tra cánh gà sân khấu"></button><button class="ballroom-hotspot spot-footprint" type="button" data-ballroom-clue="footprint" aria-label="Kiểm tra dấu giày trên thảm"></button>
-          <div class="ballroom-scene-tag">SẢNH TIỆC / 22:15 <span>CHỌN ĐIỂM SÁNG ĐỂ KIỂM TRA</span></div>
-        </div>
-        <div class="ballroom-readout" id="ballroom-readout" role="status" aria-live="polite"><span>QUAN SÁT HIỆN TRƯỜNG</span><strong>Đội điều tra đã phong tỏa sảnh. Hãy kiểm tra các điểm nghi vấn.</strong></div>
-      </main>
-      <aside class="ballroom-notebook">
-        <nav class="ballroom-tabs" aria-label="Các bước điều tra vụ án sảnh tiệc"><button class="active" type="button" data-ballroom-tab="clues">MANH MỐI <b id="ballroom-clue-count">0/6</b></button><button type="button" data-ballroom-tab="interview">NHÂN CHỨNG</button><button type="button" data-ballroom-tab="conclusion">KẾT LUẬN</button></nav>
-        <section class="ballroom-panel" data-ballroom-panel="clues"><span class="ballroom-panel-kicker">HỒ SƠ #02 / GHI CHÉP</span><h2>Dương Khải, 41 tuổi</h2><p class="ballroom-victim-note">Nhà tài trợ chính của buổi tiệc. Được phát hiện trên thảm đỏ lúc 22:15, ngay trước màn phát biểu.</p><div class="ballroom-clue-list" id="ballroom-clue-list"></div></section>
-        <section class="ballroom-panel hidden" data-ballroom-panel="interview"><span class="ballroom-panel-kicker">LỜI KHAI / ĐỐI CHIẾU</span><h2>Người có mặt trong sảnh</h2><div class="ballroom-suspects" id="ballroom-suspects"></div><div class="ballroom-testimony" id="ballroom-testimony" aria-live="polite">Chọn một người để nghe lời khai.</div></section>
-        <section class="ballroom-panel hidden" data-ballroom-panel="conclusion"><span class="ballroom-panel-kicker">BÁO CÁO / HỒ SƠ #02</span><h2>Ai đã hạ độc Dương Khải?</h2><p>Chọn người bạn cho là đã ra tay, dựa trên bằng chứng và lời khai.</p><div class="ballroom-accusations" id="ballroom-accusations"></div><button class="ballroom-submit" id="ballroom-submit" type="button">KHÓA KẾT LUẬN <span>→</span></button><div class="ballroom-result hidden" id="ballroom-result" role="status"></div></section>
-      </aside>
-    </div>
-  </section>
-  <script src="main.js"></script>
-  <script src="ballroom-case.js"></script>
+  <script src="js/engine/core.js"></script>
+  <script src="js/engine/people.js"></script>
+  <script src="js/engine/props.js"></script>
+  <script src="js/engine/art.js"></script>
+  <script src="js/cases/case-01-phong-204.js"></script>
+  <script src="js/cases/case-02-van-hoa.js"></script>
+  <script src="js/cases/case-03-kim-thoi.js"></script>
+  <script src="js/cases/case-04-tau-dem.js"></script>
+  <script src="js/cases/case-05-toa-soan.js"></script>
+  <script src="js/game.js"></script>
 </body>
 </html>
