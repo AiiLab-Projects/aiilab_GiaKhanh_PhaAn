@@ -193,12 +193,7 @@
     done: 'Ông Đạt chết lúc 21:55. Kẻ giết ông đã đứng máy thay ông thêm mười phút để giữ màn ảnh sáng — rồi chạy xuống sảnh tạo ngoại phạm.'
   },
 
-  pressure: {
-    budget: 40, wrongCost: 8,
-    warn: [{ at: 15, text: 'Tâm vừa xin nghỉ phép "về quê có việc gấp".' }, { at: 6, text: 'Có người thấy Tâm mua vé xe khách đi Lạng Sơn chuyến sáng sớm.' }]
-  },
   endings: {
-    escape: 'Sáng hôm sau, chuyến xe khách 5 giờ đi Lạng Sơn có một hành khách trẻ ôm chiếc ba lô vải xanh. Ba tháng sau, băng lậu phim của rạp Tháng Tám vẫn bán đầy chợ Trời. Rạp đóng cửa trước Tết.',
     wrong: {
       huong: 'Bà Hương bị tạm giữ với động cơ "muốn bán rạp". Báo chí làm ầm lên; công ty Hưng Thịnh mua lại rạp với giá rẻ chỉ một tuần sau. Còn mối nối băng dính vàng vẫn chờ người đọc ra nó.',
       hien: 'Hiển bị bắt vì khoản nợ hai triệu. Nhưng tiếng máy phát trong bộ đàm lúc 22:00 là ngoại phạm không thể chối. Hồ sơ bị trả về, và bạn mất thêm thời gian.',

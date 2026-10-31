@@ -191,12 +191,7 @@
     done: 'Kỹ sư Sơn còn sống khi lên chuyến phà 23:30. Anh chết trên phà, không phải dưới sông.'
   },
 
-  pressure: {
-    budget: 44, wrongCost: 8,
-    warn: [{ at: 16, text: 'Tư Hải đang tháo bạt che máy phà, như chuẩn bị đi xa.' }, { at: 6, text: 'Luật sư của Hưng Thịnh vừa đến bến phà.' }]
-  },
   endings: {
-    escape: 'Bốn giờ sáng hôm sau, phà Vạn Phúc tháo neo không đèn. Người ta tìm thấy nó mắc cạn ở bãi bồi hạ lưu, khoang trống, chậu nhôm đã được cọ sạch. Báo cáo vết nứt trụ 13 không bao giờ được tìm thấy.',
     wrong: {
       bao: 'Trịnh Bảo bị tạm giữ. Một giờ sau, ba luật sư của Hưng Thịnh có mặt cùng lễ tân và tài xế khách sạn Bến Thành. Bảo được thả, còn tờ báo sáng hôm sau đăng: "Công an bắt nhầm doanh nhân".',
       nam: 'Bà Năm bị đưa về đồn trong tiếng khóc của đứa cháu. Cả bến phà biết bà không thể dìm nổi một người đàn ông. Người duy nhất mỉm cười là Tư Hải.',
