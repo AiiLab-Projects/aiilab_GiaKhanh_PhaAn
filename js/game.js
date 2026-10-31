@@ -20,8 +20,8 @@
     try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* chế độ riêng tư: bỏ qua */ }
   }
   function progress(c) {
-    const p = state.cases[c.id] = Object.assign({ found: [], deductions: [], notes: '', attempts: 0, solved: false, stress: {}, log: [], dialog: {} }, state.cases[c.id]);
-    p.stress = p.stress || {}; p.dialog = p.dialog || {};
+    const p = state.cases[c.id] = Object.assign({ found: [], deductions: [], notes: '', attempts: 0, solved: false, stress: {}, log: [], dialog: {}, spent: 0, broken: {}, tl: {}, timeline: false, ending: null }, state.cases[c.id]);
+    p.stress = p.stress || {}; p.dialog = p.dialog || {}; p.broken = p.broken || {}; p.tl = p.tl || {}; p.spent = p.spent || 0;
     return p;
   }
 
@@ -67,7 +67,7 @@
     const parts = location.hash.replace(/^#\/?/, '').split('/');
     if (parts[0] === 'ho-so') {
       const c = CASES.find(x => x.id === parts[1]);
-      if (c) {
+      if (c && !lockInfo(c)) {
         const tab = STEPS.some(t => t.id === parts[2]) ? parts[2] : 'scene';
         if (current && current.c === c && $('.case-app')) { current.tab = tab; renderSteps(); renderMode(); return; }
         return screenCase(c, tab);
@@ -117,7 +117,7 @@
     root.innerHTML = '';
     const el = h(`
       <section class="intro-screen">
-        <div class="intro-photos" aria-hidden="true">${CASES.map((c, i) => `<figure style="--r:${[-7, 5, -3, 8, -5][i % 5]}deg"><canvas></canvas><figcaption>#${esc(c.number)} ${esc(c.title)}</figcaption></figure>`).join('')}</div>
+        <div class="intro-photos" aria-hidden="true">${CASES.filter(c => !c.finale).map((c, i) => `<figure style="--r:${[-7, 5, -3, 8, -5][i % 5]}deg"><canvas></canvas><figcaption>#${esc(c.number)} ${esc(c.title)}</figcaption></figure>`).join('')}</div>
         <form class="intro-card">
           <span class="kicker">Phòng hồ sơ đặc biệt · Vạn Phúc 1999</span>
           <h1>Hồ Sơ <em>13</em></h1>
@@ -129,7 +129,7 @@
         </form>
       </section>`);
     root.appendChild(el);
-    $$('.intro-photos canvas', el).forEach((cv, i) => setTimeout(() => stillOf(cv, CASES[i]), 30 * i));
+    $$('.intro-photos canvas', el).forEach((cv, i) => setTimeout(() => stillOf(cv, CASES.filter(c => !c.finale)[i]), 30 * i));
     const input = $('#agent-name', el);
     input.focus();
     $('form', el).onsubmit = e => {
@@ -147,9 +147,9 @@
         <h2>Cách phá một vụ án</h2>
         <div class="tutorial-steps">
           <div><b>1</b><strong>Khám hiện trường</strong><p>Đi bằng WASD / phím mũi tên hoặc bấm vào sàn. Lại gần chỗ lấp lánh và bấm <kbd>E</kbd>, hoặc bấm thẳng vào đồ vật.</p></div>
-          <div><b>2</b><strong>Thẩm vấn</strong><p>Hỏi ngoại phạm, quan hệ. Bấm một thẻ trong <b>túi chứng cứ</b> để đưa ra trước mặt nghi phạm.</p></div>
-          <div><b>3</b><strong>Suy luận</strong><p>Đặt hai manh mối vào phương trình. Ghép đúng sẽ mở ra một suy luận.</p></div>
-          <div><b>4</b><strong>Buộc tội</strong><p>Chỉ ra hung thủ trong hàng nhận diện và ba chứng cứ quyết định.</p></div>
+          <div><b>2</b><strong>Thẩm vấn</strong><p>Hỏi ngoại phạm, quan hệ, đưa thẻ trong <b>túi chứng cứ</b>. Ở các vụ mới, bấm <b>Đối chất</b> để bắt mâu thuẫn từng câu khai.</p></div>
+          <div><b>3</b><strong>Suy luận</strong><p>Ghép hai manh mối để mở suy luận, rồi xếp <b>dòng thời gian</b> cho đúng giờ.</p></div>
+          <div><b>4</b><strong>Buộc tội</strong><p>Chỉ ra hung thủ và ba chứng cứ quyết định. Coi chừng <b>đồng hồ ⏳</b>: hết giờ là hung thủ trốn mất, bắt nhầm thì hồ sơ rẽ sang hướng khác.</p></div>
         </div>
         <button class="primary-button big">Bắt đầu <span>→</span></button>
       </div>`);
@@ -158,8 +158,18 @@
   }
 
   // ==================== MÀN HÌNH 2: CHỌN VỤ ÁN ====================
+  // Mạch truyện Hồ sơ 13: vụ cuối (finale) chỉ mở khi đã phá đủ số vụ khác
+  const isSolved = c => !!(state.cases[c.id] && state.cases[c.id].solved);
+  function lockInfo(c) {
+    if (!c.unlockAfter) return null;
+    const n = CASES.filter(x => !x.finale && isSolved(x)).length;
+    return n >= c.unlockAfter ? null : { need: c.unlockAfter - n };
+  }
   function caseStatus(c) {
+    const lk = lockInfo(c);
+    if (lk) return { cls: 'locked', text: `Khoá · phá thêm ${lk.need} vụ để mở`, pct: 0 };
     const p = state.cases[c.id];
+    if (p && p.ending === 'escape') return { cls: 'open', text: 'Hung thủ đã trốn · điều tra lại', pct: 0 };
     if (!p || (!p.found.length && !p.solved)) return { cls: 'new', text: 'Chưa mở', pct: 0 };
     if (p.solved) return { cls: 'solved', text: `Đã phá · hạng ${p.rank}`, pct: 100 };
     const pct = Math.round((p.found.length / c.clues.length) * 100);
@@ -189,6 +199,7 @@
           <div class="case-list-wrap">
             <h2 class="list-title">Tủ hồ sơ <small>${CASES.length} vụ án</small></h2>
             <ol class="case-list"></ol>
+            <section class="meta-board" aria-label="Mạch truyện Hồ sơ 13"></section>
           </div>
         </div>
       </div>`);
@@ -202,7 +213,7 @@
       return `<li><button class="case-row ${st.cls}" data-i="${i}" style="--row:${t.accent}">
         <canvas aria-hidden="true"></canvas>
         <span class="row-text"><small>Hồ sơ #${esc(c.number)} · ${stars(c.difficulty)}</small><strong>${esc(c.title)}</strong><em>${esc(c.theme ? c.theme.mood : c.location)}</em></span>
-        <span class="row-status ${st.cls}">${st.cls === 'solved' ? 'Hạng ' + esc(state.cases[c.id].rank) : st.cls === 'open' ? st.pct + '%' : 'Mới'}</span>
+        <span class="row-status ${st.cls}">${st.cls === 'solved' ? 'Hạng ' + esc(state.cases[c.id].rank) : st.cls === 'open' ? st.pct + '%' : st.cls === 'locked' ? '🔒' : 'Mới'}</span>
       </button></li>`;
     }).join('');
     $$('.case-row', list).forEach((b, i) => {
@@ -210,9 +221,24 @@
       b.onclick = () => { if (idx === i) openCase(CASES[i]); else select(i); };
     });
 
+    drawMeta($('.meta-board', el));
+
     function select(i) {
       idx = i;
       const c = CASES[i], st = caseStatus(c), p = state.cases[c.id];
+      if (st.cls === 'locked') {
+        applyTheme(c);
+        $$('.case-row', list).forEach((b, j) => { b.classList.toggle('active', j === i); b.setAttribute('aria-current', j === i); });
+        feature.innerHTML = `
+          <div class="feature-art locked-art"><span class="feature-no">Hồ sơ #${esc(c.number)}</span><div class="lock-big">🔒<b>Hồ sơ niêm phong</b></div></div>
+          <div class="feature-body">
+            <div class="feature-pills"><span class="pill">Mạch truyện chính</span><span class="pill diff">${stars(c.difficulty)} ${DIFF[c.difficulty] || ''}</span></div>
+            <h1>${c.titleHtml || esc(c.title)}</h1>
+            <p class="feature-tag">${esc(c.lockedText || c.tagline)}</p>
+            <div class="briefing-goal"><span>Điều kiện mở</span>Phá thêm ${lockInfo(c).need} vụ án nữa. Mỗi vụ đã phá trao cho bạn một mảnh của Hồ sơ 13.</div>
+          </div>`;
+        return;
+      }
       state.lastCase = c.id; save();
       applyTheme(c);
       $$('.case-row', list).forEach((b, j) => { b.classList.toggle('active', j === i); b.setAttribute('aria-current', j === i); });
@@ -262,7 +288,23 @@
 
   // ==================== HỒ SƠ: TÓM TẮT ====================
   let pendingBrief = null; // hiện tóm tắt sau khi màn chơi đã dựng xong (route() đóng mọi hộp thoại cũ)
+  function drawMeta(box) {
+    const parts = CASES.filter(c => c.meta && !c.finale);
+    const got = parts.filter(isSolved).length;
+    box.innerHTML = `<h2 class="list-title">Mạch truyện Hồ sơ 13 <small>${got}/${parts.length} mảnh</small></h2>
+      <div class="meta-pieces">${parts.map(c => isSolved(c)
+        ? `<button class="meta-piece got" data-id="${c.id}"><small>#${esc(c.number)}</small><strong>${esc(c.meta.title)}</strong></button>`
+        : `<div class="meta-piece"><small>#${esc(c.number)}</small><strong>???</strong></div>`).join('')}</div>`;
+    $$('.meta-piece.got', box).forEach(b => b.onclick = () => {
+      const c = CASES.find(x => x.id === b.dataset.id);
+      const m = h(`<div class="meta-note"><span class="eyebrow">Mảnh hồ sơ · vụ #${esc(c.number)} ${esc(c.title)}</span><h2>${esc(c.meta.title)}</h2><p>${esc(c.meta.fragment)}</p><button class="primary-button">Đóng</button></div>`);
+      const close = modal(m);
+      $('.primary-button', m).onclick = close;
+    });
+  }
+
   function openCase(c) {
+    if (lockInfo(c)) { toast('Hồ sơ này còn niêm phong. Phá thêm ' + lockInfo(c).need + ' vụ để mở.'); return; }
     const p = state.cases[c.id];
     state.lastCase = c.id; save();
     if (!p || (!p.found.length && !p.solved)) pendingBrief = c;
@@ -307,6 +349,7 @@
           <div class="hud-title"><small>Hồ sơ #${esc(c.number)} · ${esc(c.clock)} · ${esc(c.weather)}</small><strong>${esc(c.title)}</strong></div>
           <nav class="steps" aria-label="Các bước điều tra"></nav>
           <div class="hud-tools">
+            ${c.pressure ? '<div class="hud-clock" title="Thời gian điều tra còn lại trước khi hung thủ kịp trốn"><span>⏳</span><b></b><i><u></u></i></div>' : ''}
             <button class="hud-btn brief" title="Đọc lại hồ sơ vụ án">Hồ sơ</button>
             <button class="hud-btn nb-open" title="Mở sổ tay điều tra">Sổ tay</button>
           </div>
@@ -325,6 +368,7 @@
     $('.nb-open', el).onclick = () => toggleDrawer(true);
     $('.drawer-back', el).onclick = () => toggleDrawer(false);
     renderSteps();
+    renderPressure();
     renderMode();
     if (pendingBrief === c) { pendingBrief = null; briefing(c); }
   }
@@ -339,7 +383,7 @@
     const nav = $('.steps');
     if (!nav) return;
     const k = counts(), p = progress(current.c);
-    const badge = { scene: `${k.vat}/${k.vatT}`, interview: `${Object.keys(p.dialog).filter(id => p.dialog[id].length).length}/${current.c.suspects.length}`, board: `${k.ded}/${k.dedT}`, conclude: p.solved ? '✓' : '' };
+    const badge = { scene: `${k.vat}/${k.vatT}`, interview: `${Object.keys(p.dialog).filter(id => p.dialog[id].length).length}/${current.c.suspects.length}`, board: `${k.ded}/${k.dedT}${current.c.timeline ? (p.timeline ? ' · ⏱✓' : ' · ⏱') : ''}`, conclude: p.solved ? '✓' : '' };
     nav.innerHTML = STEPS.map((t, i) => `<button class="step ${current.tab === t.id ? 'active' : ''}" aria-current="${current.tab === t.id ? 'step' : 'false'}" data-tab="${t.id}"><span class="step-no">${i + 1}</span><span class="step-label">${t.label}</span>${badge[t.id] ? `<b>${badge[t.id]}</b>` : ''}</button>`).join('<i class="step-line" aria-hidden="true"></i>');
     $$('.step', nav).forEach(b => b.onclick = () => go(`#/ho-so/${current.c.id}/${b.dataset.tab}`));
   }
@@ -350,6 +394,8 @@
     const area = $('.mode-area');
     area.innerHTML = '';
     area.className = 'mode-area mode-' + current.tab;
+    const p = progress(current.c);
+    if (p.ending === 'escape' && !p.solved) { area.className = 'mode-area mode-conclude'; escapedView(area); renderBag(); return; }
     ({ scene: modeScene, interview: modeInterview, board: modeBoard, conclude: modeAccuse })[current.tab](area);
     renderBag();
     renderDrawer();
@@ -849,6 +895,7 @@
           <div class="vn-stage">
             <canvas class="scene-canvas"></canvas>
             <span class="stage-tag">${esc(iv.place || 'Phòng thẩm vấn')}</span>
+            <div class="objection" aria-hidden="true">Mâu thuẫn!</div>
             <div class="vn-box" aria-live="polite">
               <div class="vn-face"><canvas width="64" height="64"></canvas></div>
               <div class="vn-main">
@@ -859,14 +906,22 @@
               </div>
             </div>
           </div>
-          <div class="vn-actions">
+          <div class="vn-actions main-actions">
             <button class="act" data-act="alibi"><b>Hỏi ngoại phạm</b><span>${esc(iv.alibiQ || 'Đêm đó anh/chị ở đâu?')}</span></button>
             <button class="act" data-act="motive"><b>Hỏi quan hệ</b><span>${esc(iv.motiveQ || 'Quan hệ với nạn nhân thế nào?')}</span></button>
             <button class="act present" data-act="present"><b>Đưa chứng cứ</b><span>Bấm một thẻ trong túi chứng cứ bên dưới</span></button>
+            <button class="act cross" data-act="cross"><b>Đối chất</b><span>Nghe lại từng câu khai và bắt mâu thuẫn</span></button>
             <div class="vn-meta">
               <div class="stress"><span>Căng thẳng</span><i><u></u></i><b></b></div>
               <button class="text-button history">Xem lịch sử hỏi cung</button>
             </div>
+          </div>
+          <div class="vn-actions cross-actions hidden">
+            <button class="act" data-x="prev"><b>◀ Câu trước</b><span>Quay lại câu khai trước</span></button>
+            <button class="act" data-x="press"><b>Hỏi vặn</b><span>Ép nghi phạm nói rõ hơn câu này</span></button>
+            <button class="act present" data-x="object"><b>Phản bác!</b><span>Bấm thẻ chứng cứ mâu thuẫn trong túi bên dưới</span></button>
+            <button class="act" data-x="next"><b>Câu sau ▶</b><span>Sang câu khai tiếp theo</span></button>
+            <div class="vn-meta"><div class="cross-count"></div><button class="text-button exit-cross">Kết thúc đối chất</button></div>
           </div>
         </div>
       </div>`);
@@ -894,6 +949,13 @@
       const n = (p.dialog[s.id] || []).length / 2;
       $('.history', el).textContent = n ? `Xem lịch sử hỏi cung (${n})` : 'Chưa có lịch sử hỏi cung';
       $('.history', el).disabled = !n;
+      const T = s.testimony || [];
+      $('.act.cross', el).classList.toggle('hidden', !T.length);
+      $('.main-actions', el).classList.toggle('has-cross', !!T.length);
+      if (T.length) {
+        const k = T.filter(x => x.contra).length, b = (p.broken[s.id] || []).length;
+        $('.act.cross span', el).textContent = b ? `Đã bắt được ${b}/${k} mâu thuẫn` : 'Nghe lại từng câu khai và bắt mâu thuẫn';
+      }
     }
     function showLine(q, a, unlock, animate) {
       $('.vn-q', el).textContent = q ? state.name + ': “' + q + '”' : '';
@@ -913,6 +975,7 @@
       L.push({ who: 'me', text: q }, { who: 'them', text: a, unlock });
       if (L.length > 60) L.splice(0, L.length - 60);
       save();
+      spend(1);
       drawHead(m); drawRail(); renderSteps(); renderDrawer();
       showLine(q, a, unlock, true);
     }
@@ -920,10 +983,74 @@
       stopScenes();
       run(new PixelScene($('.vn-stage canvas', el), interviewSpec(c, sus()), { hint: false }));
     }
-    function drawAll() { drawRail(); drawHead(); showLast(); drawRoom(); }
+    function drawAll() { cross = null; toggleCross(); drawRail(); drawHead(); showLast(); drawRoom(); }
 
-    $('.vn-box', el).onclick = finishTyping;
-    $$('.act', el).forEach(b => b.onclick = () => {
+    // ----- Đối chất: nghe từng câu khai, đưa chứng cứ vào đúng câu nói dối -----
+    let cross = null;
+    const testimony = () => sus().testimony || [];
+    const brokenOf = id => (p.broken[id] = p.broken[id] || []);
+    function toggleCross() {
+      const on = cross != null;
+      $('.main-actions', el).classList.toggle('hidden', on);
+      $('.cross-actions', el).classList.toggle('hidden', !on);
+      el.classList.toggle('crossing', on);
+      current.bagHint = on ? 'Bấm thẻ chứng cứ mâu thuẫn với câu khai đang hiện' : 'Bấm một thẻ để đưa ra trước mặt nghi phạm';
+      renderBag();
+    }
+    function showStatement(animate) {
+      const s = sus(), T = testimony(), st = T[cross], done = brokenOf(s.id).includes(cross);
+      $('.vn-q', el).textContent = `Lời khai ${cross + 1}/${T.length}${done ? ' · đã bị bác bỏ' : ''}`;
+      $('.vn-unlock', el).classList.add('hidden');
+      const txt = $('.vn-text', el);
+      txt.classList.toggle('struck', done);
+      if (animate) typeText(txt, '“' + st.text + '”'); else { finishTyping(); txt.textContent = '“' + st.text + '”'; }
+      $('[data-x=prev]', el).disabled = cross === 0;
+      $('[data-x=next]', el).disabled = cross === T.length - 1;
+      $('.cross-count', el).innerHTML = `<b>Đối chất</b> Mâu thuẫn đã bắt: ${brokenOf(s.id).length}/${T.filter(x => x.contra).length}`;
+    }
+    function objection(ok) {
+      const o = $('.objection', el), st = $('.vn-stage', el);
+      o.textContent = ok ? 'Mâu thuẫn!' : 'Không khớp…';
+      o.classList.toggle('miss', !ok);
+      o.classList.remove('show'); st.classList.remove('jolt'); void o.offsetWidth;
+      o.classList.add('show'); if (ok) st.classList.add('jolt');
+    }
+    $('.act.cross', el).onclick = () => { cross = 0; toggleCross(); drawHead(); showStatement(true); };
+    $('.exit-cross', el).onclick = () => { cross = null; toggleCross(); drawHead(); showLast(); };
+    $('[data-x=prev]', el).onclick = () => { if (cross > 0) { cross--; showStatement(true); } };
+    $('[data-x=next]', el).onclick = () => { if (cross < testimony().length - 1) { cross++; showStatement(true); } };
+    $('[data-x=object]', el).onclick = () => { flashBag(); if (!p.found.length) toast('Túi chứng cứ còn trống.'); };
+    $('[data-x=press]', el).onclick = () => {
+      const st = testimony()[cross];
+      say('Nói rõ hơn đi: “' + st.text + '”', st.press || 'Tôi đã nói hết những gì tôi biết.', 'nervous');
+    };
+    function crossPick(id) {
+      const s = sus(), st = testimony()[cross], cl = clueById(id);
+      if (brokenOf(s.id).includes(cross)) { toast('Câu khai này đã bị bác bỏ. Sang câu khác.'); return; }
+      const hits = [].concat(st.contra || []);
+      if (hits.includes(id)) {
+        brokenOf(s.id).push(cross);
+        p.stress[s.id] = Math.min(100, (p.stress[s.id] || 0) + 30);
+        p.log.push({ t: now(), text: `Bắt mâu thuẫn: ${s.name} — ${cl.label}` });
+        objection(true);
+        const fresh = st.unlock && !p.found.includes(st.unlock);
+        setTimeout(() => {
+          say(`Câu khai đó mâu thuẫn với ${cl.label}!`, st.broken, 'angry', fresh ? clueById(st.unlock).label : null);
+          if (fresh) record(st.unlock, s.name);
+          $('.vn-q', el).textContent = 'Lời khai ' + (cross + 1) + ' · bị bác bỏ';
+          $('.cross-count', el).innerHTML = `<b>Đối chất</b> Mâu thuẫn đã bắt: ${brokenOf(s.id).length}/${testimony().filter(x => x.contra).length}`;
+        }, 700);
+      } else {
+        objection(false);
+        p.stress[s.id] = Math.max(0, (p.stress[s.id] || 0) - 8);
+        spend(1);
+        say(`Câu khai đó mâu thuẫn với ${cl.label}!`, (s.deflect && s.deflect[Math.floor(Math.random() * s.deflect.length)]) || 'Cái đó thì liên quan gì tới điều tôi vừa nói? Anh/chị đang đoán mò.', 'neutral');
+      }
+    }
+
+    // Bấm hộp thoại: đang chạy chữ thì hiện hết; đang đối chất thì quay về câu khai
+    $('.vn-box', el).onclick = () => { if (typing) finishTyping(); else if (cross != null) showStatement(false); };
+    $$('.main-actions .act:not(.cross)', el).forEach(b => b.onclick = () => {
       const s = sus();
       if (b.dataset.act === 'alibi') say(iv.alibiQ || 'Đêm xảy ra vụ việc, anh/chị ở đâu?', s.alibi);
       else if (b.dataset.act === 'motive') say(iv.motiveQ || 'Anh/chị quan hệ với nạn nhân thế nào?', s.motive);
@@ -938,6 +1065,7 @@
 
     current.bagHint = 'Bấm một thẻ để đưa ra trước mặt nghi phạm';
     current.onPick = id => {
+      if (cross != null) return crossPick(id);
       const s = sus(), cl = clueById(id);
       const r = s.presents && s.presents[id];
       const q = `Anh/chị giải thích thế nào về: ${cl.label}?`;
@@ -976,6 +1104,13 @@
           <h3>Suy luận của vụ án <small class="ded-count"></small></h3>
           <div class="ded-grid"></div>
         </section>
+        ${c.timeline ? `<section class="ded-section tl-section">
+          <h3>Dòng thời gian <small class="tl-state"></small></h3>
+          <p class="think-sub">${esc(c.timeline.intro || 'Xếp các sự kiện vào đúng mốc giờ. Mỗi sự kiện chỉ hiện ra khi bạn đã có manh mối tương ứng.')}</p>
+          <ol class="tl-track"></ol>
+          <div class="tl-pool"></div>
+          <div class="tl-actions"><button class="primary-button tl-check">Kiểm tra dòng thời gian</button><span class="tl-msg" aria-live="polite"></span></div>
+        </section>` : ''}
       </div>`);
     area.appendChild(el);
 
@@ -1027,12 +1162,131 @@
     };
     drawSlots(null);
     drawDeductions();
+    if (c.timeline) timelineBoard($('.tl-section', el), c, p);
+  }
+
+  // ---------- Dòng thời gian (kiểu The Case of the Golden Idol): kéo hoặc bấm sự kiện rồi bấm mốc giờ ----------
+  function timelineBoard(box, c, p) {
+    const T = c.timeline, ev = id => T.events.find(e => e.id === id);
+    const ready = e => [].concat(e.need || []).every(id => p.found.includes(id));
+    let sel = null;
+    function place(slot, id) {
+      if (p.timeline) return;
+      Object.keys(p.tl).forEach(k => { if (p.tl[k] === id) delete p.tl[k]; });
+      if (id) p.tl[slot] = id; else delete p.tl[slot];
+      sel = null; save(); draw();
+    }
+    function draw() {
+      const placed = Object.values(p.tl);
+      $('.tl-state', box).textContent = p.timeline ? '✓ Đã dựng xong' : `${placed.length}/${T.slots.length} mốc`;
+      $('.tl-track', box).innerHTML = T.slots.map((sl, i) => {
+        const e = p.tl[i] && ev(p.tl[i]);
+        return `<li><time>${esc(sl.t)}</time><button class="tl-slot ${e ? 'filled' : ''} ${p.timeline ? 'done' : ''}" data-i="${i}">${e ? esc(e.text) : '<em>Thả sự kiện vào đây</em>'}</button></li>`;
+      }).join('');
+      const pool = T.events.filter(e => !placed.includes(e.id));
+      $('.tl-pool', box).innerHTML = p.timeline ? '' : pool.map(e => ready(e)
+        ? `<button class="tl-event ${sel === e.id ? 'selected' : ''}" draggable="true" data-id="${e.id}">${esc(e.text)}</button>`
+        : `<div class="tl-event locked">Sự kiện chưa rõ — cần thêm manh mối</div>`).join('');
+      $('.tl-check', box).disabled = p.timeline || placed.length < T.slots.length;
+      $('.tl-check', box).classList.toggle('hidden', !!p.timeline);
+      if (p.timeline) $('.tl-msg', box).textContent = T.done || 'Dòng thời gian khớp với mọi chứng cứ.';
+      $$('.tl-event[data-id]', box).forEach(b => {
+        b.onclick = () => { sel = sel === b.dataset.id ? null : b.dataset.id; draw(); };
+        b.ondragstart = e => { e.dataTransfer.setData('text/plain', b.dataset.id); };
+      });
+      $$('.tl-slot', box).forEach(b => {
+        const i = b.dataset.i;
+        b.onclick = () => { if (sel) place(i, sel); else if (p.tl[i]) place(i, null); };
+        b.ondragover = e => { e.preventDefault(); b.classList.add('over'); };
+        b.ondragleave = () => b.classList.remove('over');
+        b.ondrop = e => { e.preventDefault(); const id = e.dataTransfer.getData('text/plain'); if (id) place(i, id); };
+      });
+    }
+    $('.tl-check', box).onclick = () => {
+      const ok = T.slots.filter((sl, i) => { const e = p.tl[i] && ev(p.tl[i]); return e && e.slot === i; }).length;
+      const msg = $('.tl-msg', box);
+      if (ok === T.slots.length) {
+        p.timeline = true;
+        p.log.push({ t: now(), text: 'Dựng xong dòng thời gian' });
+        save(); renderSteps(); renderDrawer();
+        toast('<b>Dòng thời gian hoàn chỉnh</b> Đã đủ điều kiện xin lệnh bắt', 'ded');
+      } else {
+        msg.textContent = `Mới khớp ${ok}/${T.slots.length} mốc. Có sự kiện đang nằm sai giờ.`;
+        box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+        spend(1);
+      }
+      draw();
+    };
+    draw();
   }
 
   // ---------- Bước 4: buộc tội ----------
+  // ---------- Áp lực thời gian & các kết thúc ----------
+  // Mỗi câu hỏi, mỗi lần đối chất hụt, mỗi lần buộc tội nhầm đều tiêu tốn "giờ điều tra".
+  // Hết giờ: hung thủ trốn thoát (kết thúc xấu), phải điều tra lại từ đầu.
+  const hoursLeft = (c, p) => Math.max(0, c.pressure.budget - p.spent);
+  function renderPressure() {
+    const box = $('.hud-clock');
+    if (!box || !current) return;
+    const { c } = current, p = progress(c), left = hoursLeft(c, p);
+    $('b', box).textContent = p.solved ? 'Đã xong' : left + ' giờ';
+    $('u', box).style.width = (p.solved ? 100 : left / c.pressure.budget * 100) + '%';
+    box.classList.toggle('low', !p.solved && left <= c.pressure.budget * 0.25);
+  }
+  function spend(n) {
+    const { c } = current, p = progress(c);
+    if (!c.pressure || p.solved || p.ending || !n) return;
+    const before = hoursLeft(c, p);
+    p.spent += n; save(); renderPressure();
+    const left = hoursLeft(c, p);
+    (c.pressure.warn || []).forEach(w => { if (before > w.at && left <= w.at) toast(`<b>Còn ${left} giờ</b> ${esc(w.text)}`, 'warn'); });
+    if (left > 0) return;
+    p.ending = 'escape';
+    p.log.push({ t: now(), text: 'Hết thời gian — hung thủ trốn thoát' });
+    save();
+    setTimeout(() => { if (current && current.c === c) { closeModals(); renderMode(); renderSteps(); endingModal(c, 'escape'); } }, 900);
+  }
+  function endingModal(c, kind, who) {
+    const E = c.endings || {};
+    const cul = c.suspects.find(s => s.id === c.solution.culprit);
+    const wrong = kind === 'wrong' && c.suspects.find(s => s.id === who);
+    const t = kind === 'escape'
+      ? { label: 'Hung thủ trốn thoát', title: 'Hồ sơ nguội lạnh', text: E.escape || 'Bạn đã mất quá nhiều thời gian. Hung thủ kịp tẩu tán chứng cứ và rời khỏi thành phố.', face: cul, mood: 'neutral' }
+      : { label: 'Bắt nhầm người', title: wrong.name + ' bị tạm giam', text: (E.wrong && E.wrong[who]) || E.wrongDefault || 'Người bị bắt có ngoại phạm vững chắc. Viện kiểm sát trả hồ sơ, còn hung thủ thật có thêm thời gian.', face: wrong, mood: 'angry' };
+    const el = h(`
+      <div class="ending ending-${kind}">
+        <canvas class="ending-face" width="64" height="64"></canvas>
+        <div>
+          <span class="eyebrow">Kết thúc · ${esc(t.label)}</span>
+          <h2>${esc(t.title)}</h2>
+          <p>${esc(t.text)}</p>
+          <div class="closed-actions">${kind === 'escape' ? '<button class="primary-button big again">Điều tra lại từ đầu <span>↺</span></button><button class="ghost-button to-list">Về tủ hồ sơ</button>' : `<button class="primary-button big">Tiếp tục điều tra <span>→</span></button><small class="ending-cost">Mất ${(c.pressure && c.pressure.wrongCost) || 0} giờ điều tra</small>`}</div>
+        </div>
+      </div>`);
+    PixelPeople.portrait($('.ending-face', el), t.face.look, t.mood, kind === 'escape' ? '#2a2630' : PORTRAIT_BG);
+    const close = modal(el, { wide: true });
+    const again = $('.again', el);
+    if (again) { again.onclick = () => restartCase(c); $('.to-list', el).onclick = () => go('#/'); }
+    else $('.primary-button', el).onclick = close;
+  }
+  function restartCase(c) {
+    delete state.cases[c.id]; save();
+    current = null; pendingBrief = c;
+    closeModals();
+    if (location.hash === '#/ho-so/' + c.id) route(); else go('#/ho-so/' + c.id);
+  }
+  function escapedView(area) {
+    const { c } = current;
+    const el = h(`<div class="closed"><div class="closed-card escaped"><span class="stamp">Hồ sơ nguội lạnh</span><h2>Hung thủ đã trốn thoát</h2><p>${esc((c.endings && c.endings.escape) || 'Hết thời gian điều tra.')}</p><div class="closed-actions"><button class="primary-button big again">Điều tra lại từ đầu <span>↺</span></button><button class="ghost-button to-list">Về tủ hồ sơ</button></div></div></div>`);
+    area.appendChild(el);
+    $('.again', el).onclick = () => restartCase(c);
+    $('.to-list', el).onclick = () => go('#/');
+  }
+
   function score(c, p, matched) {
     const k = counts();
-    const raw = 40 + 10 * matched + 20 * (k.ded / k.dedT) + 10 * (k.clues / k.cluesT) - 10 * p.attempts;
+    // Vụ có đồng hồ áp lực: còn nhiều giờ thì thưởng thêm
+    const raw = 40 + 10 * matched + 20 * (k.ded / k.dedT) + 10 * (k.clues / k.cluesT) - 10 * p.attempts + (c.pressure ? 10 * hoursLeft(c, p) / c.pressure.budget - 5 : 0);
     const s = Math.max(0, Math.min(100, Math.round(raw)));
     return { s, rank: s >= 90 ? 'S' : s >= 75 ? 'A' : s >= 60 ? 'B' : 'C' };
   }
@@ -1053,6 +1307,7 @@
           <p class="charge-sub">Chọn tối đa 3 thẻ trong túi chứng cứ. Cần đúng hung thủ và ít nhất 2 chứng cứ then chốt.</p>
           <div class="ev-slots"></div>
           <div class="result-box hidden"></div>
+          ${c.timeline && !p.timeline ? '<p class="need-timeline">Viện kiểm sát cần một <b>dòng thời gian</b> hoàn chỉnh trước khi phê chuẩn lệnh bắt. Dựng nó ở bước <a href="#/ho-so/' + c.id + '/board">Suy luận</a>.</p>' : ''}
           <button class="primary-button big accuse" disabled>Buộc tội <span>→</span></button>
           <small class="attempts">Lần buộc tội sai: ${p.attempts} (mỗi lần trừ 10 điểm)</small>
         </section>
@@ -1066,7 +1321,7 @@
         return cl ? `<button class="ev-slot filled ${cl.kind}" data-id="${cl.id}"><small>${cl.kind === 'loi' ? 'Lời khai' : 'Vật chứng'}</small><strong>${esc(cl.label)}</strong><em>Bấm để bỏ</em></button>` : `<div class="ev-slot"><small>Chứng cứ ${i + 1}</small><strong>Chọn trong túi ↓</strong></div>`;
       }).join('');
       $$('.ev-slot.filled', el).forEach(b => b.onclick = () => current.onPick(b.dataset.id));
-      $('.accuse', el).disabled = !(culprit && current.chosen.length);
+      $('.accuse', el).disabled = !(culprit && current.chosen.length) || !!(c.timeline && !p.timeline);
     }
     $$('.person', el).forEach(b => {
       PixelPeople.portrait($('canvas', b), c.suspects.find(s => s.id === b.dataset.id).look, 'neutral', PORTRAIT_BG);
@@ -1101,6 +1356,14 @@
       }
       p.attempts++;
       save();
+      if (c.endings && culprit !== c.solution.culprit) {
+        p.log.push({ t: now(), text: 'Bắt nhầm: ' + c.suspects.find(s => s.id === culprit).name });
+        res.classList.add('hidden');
+        $('.attempts', el).textContent = `Lần buộc tội sai: ${p.attempts} (mỗi lần trừ 10 điểm)`;
+        endingModal(c, 'wrong', culprit);
+        spend(c.pressure && c.pressure.wrongCost);
+        return;
+      }
       $('.attempts', el).textContent = `Lần buộc tội sai: ${p.attempts} (mỗi lần trừ 10 điểm)`;
       const missing = c.deductions.length - p.deductions.length;
       let msg;
@@ -1135,15 +1398,27 @@
           <p>${esc(c.solution.summary)}</p>
           <h3>Hậu kỳ</h3>
           <p class="epilogue">${esc(c.solution.epilogue)}</p>
+          <button class="replay-cta"><span class="replay-play">▶</span><span><b>Xem tái hiện vụ án</b><small>Phim ngắn dựng lại diễn biến thật, từng khoảnh khắc</small></span></button>
           <div class="closed-actions">${next ? `<button class="primary-button big next-case">Vụ tiếp theo: ${esc(next.title)} <span>→</span></button>` : ''}<button class="ghost-button to-list">Về danh sách vụ án</button></div>
         </div>
       </div>`);
     area.appendChild(el);
     PixelPeople.portrait($('.closed-face', el), cul.look, 'angry', PORTRAIT_BG);
     $('.to-list', el).onclick = () => go('#/');
+    $('.replay-cta', el).onclick = () => openReplay(c);
     const nx = $('.next-case', el);
     if (nx) nx.onclick = () => openCase(next);
-    if (fresh) toast(`<b>Phá án thành công</b> Hạng ${esc(p.rank)} · ${p.score} điểm`, 'ded');
+    if (fresh) {
+      toast(`<b>Phá án thành công</b> Hạng ${esc(p.rank)} · ${p.score} điểm`, 'ded');
+      // Tự chiếu phim tái hiện, trừ khi người chơi đã rời màn này
+      setTimeout(() => { if (current && current.c === c && current.tab === 'conclude' && !openModals.size) openReplay(c); }, 1400);
+    }
+  }
+
+  // Phim tái hiện vụ án (js/engine/replay.js); đăng ký như một hộp thoại để route() đóng được
+  function openReplay(c) {
+    const close = CaseReplay.open(c, { found: progress(c).found, onClose: () => openModals.delete(close) });
+    openModals.add(close);
   }
 
   // ---------- Khởi động ----------

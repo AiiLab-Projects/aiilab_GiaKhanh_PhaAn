@@ -162,6 +162,67 @@
     { a: 'hairpin', b: 'thu-saw', title: 'Chiếc kẹp tóc đồi mồi', text: 'Kẹp tóc của Trúc rơi trong khoang khi cô ngồi lại bên Hải sau 01:20.' }
   ],
 
+  // Phim tái hiện sau khi phá án (js/engine/replay.js). Vệt bụi trên giường tầng (block thứ 3)
+  // tạm dựng thành chiếc cặp bản vẽ cho tới khi Trúc lấy đi.
+  replay: {
+    start: [
+      { type: 'body', set: { hidden: true } },
+      { type: 'bit', set: { hidden: true } },
+      { type: 'bottle', set: { hidden: true } },
+      { type: 'person', i: 0, set: { hidden: true } },   // toa trưởng: do Hồ Văn Kha đóng
+      { type: 'block', i: 2, set: { w: 0.32, d: 0.32, h: 0.2, color: '#3a2a20' } }
+    ],
+    beats: [
+      { t: '22:00', place: 'Hành lang toa 7', card: ['loc', 'victim'], clues: ['loc-deal'], text: 'Thương lái Đặng Lộc cãi nhau với kỹ sư Hải chuyện thầu. Lộc biết có kẻ đang rao bán bản vẽ gốc cầu Sông Hàn, và Hải cũng vừa nhận ra điều đó.' },
+      { t: '23:00', place: 'Toa ăn', card: ['kha'], clues: ['kha-dining'], text: 'Toa trưởng Kha khóa cửa toa ăn lúc 23:00. Sau giờ này, không ai có thể ngồi trong đó.' },
+      {
+        t: '01:15', clues: ['thermos'], text: 'Trong khoang 3, Hải đối chất với thư ký Nguyễn Thanh Trúc về bản vẽ bị chụp trộm. Trúc lấy ra chiếc phích trà đỏ của riêng mình, không phải phích của tàu.',
+        patch: [{ type: 'bottle', set: { hidden: false }, after: 3 }],
+        cast: {
+          victim: { at: [0.55, 1.3], pose: 'sit', face: 'right', sort: 2 },
+          truc: { at: [2.9, 1.3], pose: 'sit', face: 'left', sort: 2 }
+        },
+        cam: { X: 1.7, z: 1.2, h: 1, zoom: 1.4 }
+      },
+      {
+        t: '01:20', clues: ['thu-saw', 'tea'], text: 'Trúc rót trà cho Hải. Trong cốc đã có sẵn thuốc ngủ nghiền nát. Từ giường trên, Lâm Minh Thư hé mắt nhìn thấy.',
+        cast: { truc: { pose: 'stand', sort: null, path: [[2.3, 1.1], [1.9, 1.0]], face: 'back', holding: '#9a3426' } },
+        cam: { X: 1.7, z: 0.5, h: 0.9, zoom: 1.8 }
+      },
+      {
+        t: '01:40', clues: ['victim'], dark: true, text: 'Trúc ngồi chờ thuốc ngấm. Hải lả dần rồi gục xuống sàn khoang. Không có vết thương nào, chỉ có đồng tử co lại.',
+        cast: {
+          truc: { holding: null, path: [[2.5, 1.0], [2.9, 1.3]], then: { pose: 'sit', face: 'left', sort: 2 } },
+          victim: { then: { delay: 3, pose: 'body', at: [0.85, 1.05], dir: 'right', sort: null } }
+        }
+      },
+      {
+        t: '01:48', clues: ['window'], dark: true, text: 'Cô đẩy hé cửa sổ để dựng cảnh một kẻ lạ trèo vào. Nhưng lớp bụi ngoài bậu cửa không hề bị xáo trộn.',
+        cast: { truc: { pose: 'stand', sort: null, path: [[2.4, 1.1], [1.75, 1.0]], face: 'back' } },
+        cam: { X: 1.7, z: 0.4, h: 1.2, zoom: 1.8 }
+      },
+      {
+        t: '01:50', clues: ['rack', 'hairpin'], dark: true, text: 'Trúc với lấy chiếc cặp bản vẽ trên giường tầng, để lại vệt bụi hình chữ nhật. Chiếc kẹp tóc đồi mồi tuột khỏi tóc, rơi xuống mép giường.',
+        patch: [{ type: 'block', i: 2, set: { w: 0.55, d: 0.02, h: 0.003, color: '#5a5446' }, after: 2.6 }, { type: 'bit', set: { hidden: false }, after: 3 }],
+        cast: { truc: { path: [[2.45, 1.5], [2.95, 1.3]], face: 'back', then: { delay: 0.8, holding: '#3a2a20' } } },
+        cam: { X: 2.9, z: 1, h: 1.4, zoom: 1.7 }
+      },
+      {
+        t: '01:52', clues: ['kha-log'], text: 'Cô xách cặp đi dọc hành lang sang toa 8. Toa trưởng Kha ghi vào sổ trực: "01:50, chị Trúc xách cặp sang toa 8".',
+        cast: {
+          kha: { at: [6.5, 2.35], face: 'left' },
+          truc: { path: [[3.0, 2.3], [6.95, 2.4]], speed: 1.1, then: { hide: true } }
+        }
+      },
+      {
+        t: '02:10', text: 'Toa trưởng Kha phát hiện Hải lúc 02:10. Khi bị hỏi, Trúc khai cô ngồi ở toa ăn suốt đêm, dù toa ăn đã khóa từ 23:00.',
+        cast: { kha: { path: [[3.1, 2.3], [2.55, 1.75]], face: 'left' } }
+      }
+    ]
+  },
+
+  meta: { title: "Thép trụ 13", fragment: "Sổ tay kỹ sư Hải: \"Thép trụ 13 không đạt mác. Đã báo Phòng hồ sơ đặc biệt — chưa thấy hồi âm.\" Bản vẽ trụ 13 là thứ duy nhất biến mất khỏi chiếc cặp." },
+
   solution: {
     culprit: 'truc',
     evidence: ['thu-saw', 'kha-dining', 'kha-log', 'thermos', 'tea', 'hairpin', 'loc-deal', 'rack'],

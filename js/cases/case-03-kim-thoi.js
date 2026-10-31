@@ -164,6 +164,89 @@
     { a: 'victim', b: 'weight', title: 'Hung khí trong tiệm', text: 'Nạn nhân bị đánh từ phía sau bằng quả tạ đồng hồ — một người ông hoàn toàn tin tưởng.' }
   ],
 
+  // Phim tái hiện sau khi phá án (js/engine/replay.js). Đồng hồ trong tiệm chạy theo giờ của từng khoảnh khắc
+  // cho tới khi hung thủ chỉnh tất cả về 22:15.
+  replay: {
+    start: [
+      { type: 'body', set: { hidden: true } },
+      { type: 'bit', set: { hidden: true } },
+      { type: 'papers', set: { hidden: true } },
+      { type: 'safe', set: { open: false } },
+      { type: 'book', set: { torn: false } },
+      { type: 'ashtray', set: { n: 0 } },
+      { type: 'clock', set: { time: '23:40', stopped: false } },
+      { type: 'shelf', set: { time: '23:40' } },
+      { type: 'grandclock', set: { time: '23:40', stopped: false } }
+    ],
+    beats: [
+      { t: '23:40', place: 'Karaoke Hoa Sen', card: ['phong'], text: 'Lý Phong hát cùng bạn bè ở karaoke Hoa Sen, nơi sẽ cho hắn ngoại phạm lúc 22:15. Lúc 23:40 hắn thanh toán, nhét hóa đơn vào túi áo rồi rời đi.' },
+      {
+        t: '23:55', clues: ['ashtray', 'tu-smoke'], text: 'Phong mở cửa cuốn bằng chìa của mình. Ông Tùng vẫn đang sửa đồng hồ ở bàn thợ. Phong ngồi xuống cạnh bố và châm điếu Craven A, loại thuốc ông Tùng đã bỏ từ năm năm trước.',
+        patch: [
+          { type: 'clock', set: { time: '23:55' } }, { type: 'shelf', set: { time: '23:55' } }, { type: 'grandclock', set: { time: '23:55' } },
+          { type: 'ashtray', set: { n: 4 }, after: 5.5 }
+        ],
+        cast: {
+          victim: { at: [2.15, 0.95], pose: 'sit', face: 'back' },
+          phong: { at: [3.2, 4.6], path: [[3.8, 3.0], [3.8, 1.1], [1.4, 1.0]], speed: 1.3, then: { pose: 'sit', face: 'right' } }
+        }
+      },
+      {
+        t: '00:20', clues: ['debt'], text: 'Phong xin bố trả giúp khoản nợ 30 cây vàng với Sáu Lùn, hạn chót là ngày 6/11. Ông Tùng từ chối, đứng dậy bỏ ra phía trước quầy.',
+        patch: [{ type: 'clock', set: { time: '00:20' } }, { type: 'shelf', set: { time: '00:20' } }, { type: 'grandclock', set: { time: '00:20' } }],
+        cast: {
+          victim: { pose: 'stand', path: [[0.6, 1.4], [0.6, 3.0], [1.2, 3.3]], face: 'left', delay: 2.5, speed: 0.9 },
+          phong: { then: { delay: 6, pose: 'stand', at: [1.4, 1.2], face: 'front' } }
+        },
+        cam: { X: 1.6, z: 1.6, h: 1, zoom: 1.4 }
+      },
+      {
+        t: '00:40', clues: ['victim', 'weight', 'diep-crash'], fx: 'flash', fxAt: 4.9,
+        text: 'Phong tháo quả tạ đồng của chiếc đồng hồ cây, vòng ra sau lưng bố và đánh mạnh. Quả tạ lăn trên sàn. Bên kia tường, bà Diệp đang ngâm gạo nghe thấy tiếng đổ vỡ.',
+        patch: [
+          { type: 'clock', set: { time: '00:40' } }, { type: 'shelf', set: { time: '00:40' } }, { type: 'grandclock', set: { time: '00:40' } },
+          { type: 'bit', set: { hidden: false }, after: 5.1 }
+        ],
+        cast: {
+          phong: { path: [[0.55, 0.85], [3.7, 1.2], [3.7, 3.2], [2.0, 3.35]], speed: 1.6, holding: '#c9a24a' },
+          victim: { then: { delay: 4.9, pose: 'body', at: [0.85, 3.2], dir: 'left' } }
+        },
+        cam: { X: 1.8, z: 3.2, h: 1.2, zoom: 1.25 }
+      },
+      {
+        t: '00:45', clues: ['safe', 'tu-code'], text: 'Hắn mở két bằng mã số mà chỉ hai bố con biết. Không có một vết cạy phá nào.',
+        patch: [{ type: 'safe', set: { open: true }, after: 3.4 }, { type: 'papers', set: { hidden: false }, after: 4 }],
+        cast: { phong: { holding: null, path: [[3.7, 3.0], [3.7, 1.0], [3.45, 0.85]], face: 'back' } },
+        cam: { X: 3.4, z: 0.6, h: 0.6, zoom: 1.7 }
+      },
+      {
+        t: '00:50', clues: ['ledger'], text: 'Ở bàn giấy, Phong xé trang "cho vay" trong sổ cái, đúng trang ghi món nợ của chính hắn.',
+        patch: [{ type: 'book', set: { torn: true }, after: 2.6 }],
+        cast: { phong: { path: [[4.7, 1.15]], face: 'front' } }, cam: { X: 4.8, z: 1.5, h: 0.8, zoom: 1.8 }
+      },
+      {
+        t: '00:55', clues: ['clocks'], text: 'Rồi hắn chỉnh từng chiếc đồng hồ trong tiệm về 22:15, giờ mà hắn còn đang ngồi giữa đám bạn ở karaoke.',
+        patch: [
+          { type: 'clock', set: { time: '00:55' } }, { type: 'shelf', set: { time: '00:55' } }, { type: 'grandclock', set: { time: '00:55' } },
+          { type: 'shelf', set: { time: '22:15' }, after: 2 }, { type: 'clock', set: { time: '22:15' }, after: 3.5 }, { type: 'grandclock', set: { time: '22:15' }, after: 4.5 }
+        ],
+        cast: { phong: { path: [[3.9, 1.1], [3.6, 0.9], [1.2, 0.9]], speed: 0.8, face: 'back' } },
+        cam: { X: 2.3, z: 0.5, h: 1.5, zoom: 1.5 }
+      },
+      {
+        t: '01:00', clues: ['wedge'], text: 'Để con lắc không chạy tiếp, hắn chèn nó bằng thứ duy nhất có trong túi: tờ hóa đơn karaoke Hoa Sen in lúc 23:40.',
+        patch: [{ type: 'grandclock', set: { stopped: true }, after: 1.4 }, { type: 'clock', set: { stopped: true }, after: 1.8 }],
+        cast: { phong: { path: [[0.6, 0.85]], face: 'back' } }, cam: { X: 0.6, z: 0.5, h: 1.2, zoom: 1.8 }
+      },
+      {
+        t: '01:05', clues: ['backdoor'], text: 'Phong ra bằng cửa cuốn phía trước rồi kéo cửa xuống. Cửa sau vẫn cài then từ bên trong: người ra vào chỉ có thể là người cầm chìa khóa tiệm.',
+        cast: { phong: { path: [[3.8, 1.3], [3.8, 3.0], [3.2, 4.7]], then: { hide: true } } }
+      }
+    ]
+  },
+
+  meta: { title: "Mười ba cây vàng", fragment: "Sổ cầm đồ của Sáu Lùn có một dòng chẳng liên quan đến Phong: \"Gửi 13 cây — H.T. — người nhận: anh L.\" Vàng của Hưng Thịnh đi qua tiệm cầm đồ trước khi tới tay một người ký tên L." },
+
   solution: {
     culprit: 'phong',
     evidence: ['wedge', 'tu-code', 'safe', 'tu-smoke', 'ashtray', 'debt', 'ledger', 'diep-crash'],

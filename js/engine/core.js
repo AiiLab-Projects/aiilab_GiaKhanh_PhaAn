@@ -843,6 +843,7 @@
   PixelScene.util = { rng, hex, css, shade, mix, clamp, hashStr };
   PixelScene.props = PROPS;
   PixelScene.blockers = BLOCKERS;
+  PixelScene.sortKey = sortKey;
   PixelScene.define = (type, def, blocker) => { PROPS[type] = def; if (blocker) BLOCKERS[type] = blocker; };
   PixelScene.still = (canvas, spec, time = 1.2) => { const s = new PixelScene(canvas, spec, { hint: false }); s.dust = []; s.renderOnce(time); return s; };
   global.PixelScene = PixelScene;

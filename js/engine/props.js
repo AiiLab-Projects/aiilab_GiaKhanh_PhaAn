@@ -82,6 +82,16 @@
         const pole = w - ((t * sp * 2.4) % (w + 1.2)) + 0.6;
         if (pole > 0 && pole < w) { f.r(pole, 0, 0.03, hh, '#05060a', '#111'); f.r(pole - 0.1, hh * 0.85, 0.23, 0.015, '#05060a', '#111'); }
         f.e(w * 0.78, hh * 0.82, 0.03, 0.03, '#e6e3d4'); // trăng
+      } else if (view === 'river') {
+        // Mặt sông đêm: bờ bên kia, trụ cầu, ánh đèn lăn tăn trên nước
+        f.r(0, 0, w, hh * 0.45, '#0a1420', '#2a3a4a');
+        f.r(0, hh * 0.45, w, hh * 0.08, '#05080c', '#222');
+        for (let x = 0.05; x < w; x += 0.13 + rand() * 0.1) if (rand() < 0.6) f.e(x, hh * 0.5, 0.015, 0.015, '#e9c27a');
+        if (p.pier) { f.r(w * 0.3, hh * 0.2, 0.08, hh * 0.6, '#0c1016', '#333'); f.r(w * 0.1, hh * 0.78, w * 0.8, 0.04, '#0c1016', '#333'); }
+        for (let i = 0; i < 14; i++) {
+          const y = hh * 0.42 * rand(), x = (rand() * w + Math.sin(t * 1.3 + i) * 0.02);
+          f.e(Math.max(0, Math.min(w - 0.06, x)), y, 0.05, 0.008, rand() < 0.5 ? '#c9a24a' : '#7f9fb8');
+        }
       }
       if (p.rain !== false) {
         const r2 = rng(hashStr('rain' + p.X));

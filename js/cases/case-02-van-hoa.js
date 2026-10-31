@@ -173,6 +173,66 @@
     { a: 'curtain', b: 'footprint', title: 'Lối đi hậu trường', text: 'Ngọc đi theo lối cánh gà ra tận chỗ Khải, trái với lời khai không rời bàn điều phối.' }
   ],
 
+  // Phim tái hiện sau khi phá án (js/engine/replay.js)
+  replay: {
+    start: [
+      { type: 'body', set: { hidden: true } },
+      { type: 'glass', set: { hidden: true } },
+      { type: 'stain', set: { hidden: true } },
+      { type: 'footprints', set: { hidden: true } },
+      { type: 'cordon', set: { hidden: true } },
+      { type: 'person', i: 6, set: { hidden: true } }   // người phục vụ: do Mai Linh đóng
+    ],
+    beats: [
+      {
+        t: '21:50', clues: ['microphone', 'duy-heard'], text: 'Giờ thử âm. Dương Khải chặn Phạm Bảo Ngọc ngay trước sân khấu: quỹ học bổng thất thoát gần hai tỷ. Micro vẫn bật và ghi lại tất cả. Nghệ sĩ Duy đứng gần đó nghe Ngọc nói: "Sổ quỹ đang ở chỗ kiểm toán".',
+        cast: {
+          ngoc: { at: [6.6, 2.2], face: 'right' },
+          victim: { at: [7.5, 2.2], face: 'left' },
+          duy: { at: [5.7, 1.2], e: 0.6, face: 'right', sort: 1.97 }
+        },
+        cam: { X: 7, z: 2, h: 1.2, zoom: 1.7 }
+      },
+      { t: '21:55', place: 'Bàn khách mời', card: ['victim', 'phuc'], clues: ['phuc-speech'], text: 'Khải cho nhà đầu tư Trịnh Phúc xem bản nháp bài phát biểu: lúc 22:15 ông sẽ đọc tên người chịu trách nhiệm ngay trên sân khấu.' },
+      {
+        t: '21:58', clues: ['placecard'], text: 'Ngọc đổi thẻ chỗ ngồi, chuyển Khải sang bàn số 7, góc khuất duy nhất mà camera sảnh không quay tới.',
+        cast: { ngoc: { path: [[9.8, 2.6], [10.5, 3.35]], face: 'front', speed: 1.6 }, victim: { hide: true }, duy: { hide: true } },
+        cam: { X: 10.5, z: 3.6, h: 1, zoom: 1.8 }
+      },
+      { t: '22:00', place: 'Phòng chuẩn bị sau cánh gà', card: ['ngoc', 'linh'], clues: ['linh-order'], text: 'Ngọc tự tay pha độc vào ly vang bên trái trên khay, rồi dặn Mai Linh: "Chỉ mang ly này ra bàn 7."' },
+      {
+        t: '22:03', text: 'Mai Linh bưng ly vang ra bàn số 7 đúng như được dặn. Khải đã ngồi đó, nhận ly mà không chút nghi ngờ.',
+        cast: {
+          ngoc: { hide: true },
+          victim: { at: [10.9, 5.2], pose: 'sit', face: 'back' },
+          linh: { at: [9.5, 2.4], path: [[10.0, 3.2], [10.15, 4.95]], face: 'right', holding: '#8a1a2a', then: { holding: null, delay: 0.6 } }
+        },
+        cam: { X: 10.6, z: 4.4, h: 1, zoom: 1.7 }
+      },
+      {
+        t: '22:05', clues: ['curtain', 'footprint'], text: 'Ngọc lách qua lối cánh gà ra sảnh, để lại một sợi chỉ nhung đỏ trên rèm. Cô đứng trên thảm đỏ chờ cho chắc Khải đã uống. Gót giày cỡ 36 in xuống lớp sáp sàn mới đánh.',
+        patch: [{ type: 'footprints', set: { hidden: false }, after: 4.5 }],
+        cast: {
+          ngoc: { at: [9.3, 1.9], path: [[9.0, 3.4], [7.45, 5.5], [7.45, 6.7]], face: 'right', delay: 0.6, speed: 1.1 },
+          linh: { path: [[9.6, 2.4]], then: { hide: true } }
+        }
+      },
+      {
+        t: '22:15', clues: ['victim', 'glass'], fx: 'flash', fxAt: 3.4,
+        text: 'Đến giờ phát biểu, Khải rời bàn, bước về phía sân khấu. Chưa tới bục, ông gục xuống thảm đỏ. Ly pha lê vỡ tan, cặn rượu vẫn còn nguyên độc chất.',
+        patch: [{ type: 'glass', set: { hidden: false }, after: 3.4 }, { type: 'stain', set: { hidden: false }, after: 3.4 }],
+        cast: { victim: { at: [10.9, 5.2], pose: 'stand', path: [[8.3, 5.05]], speed: 0.85, holding: '#8a1a2a', then: { delay: 0.3, pose: 'body', at: [6.1, 4.75], dir: 'right', holding: null } } },
+        cam: { X: 7.4, z: 5, h: 1, zoom: 1.4 }
+      },
+      {
+        t: '22:17', text: 'Cả sảnh đổ dồn về phía thảm đỏ. Ngọc lặng lẽ quay về bàn điều phối, như thể chưa từng rời đi.',
+        cast: { ngoc: { path: [[9.5, 7.3], [12.0, 7.4]], face: 'left' } }
+      }
+    ]
+  },
+
+  meta: { title: "Quỹ học bổng ma", fragment: "Sổ quỹ của Khải cho thấy bốn tỷ đồng \"học bổng\" chảy về công ty xây dựng Hưng Thịnh — nhà thầu trụ cầu số 13. Ghi chú bên lề: \"Bản sao số 2 — đã gửi P.HSĐB\". P.HSĐB: Phòng hồ sơ đặc biệt." },
+
   solution: {
     culprit: 'ngoc',
     evidence: ['linh-order', 'placecard', 'curtain', 'footprint', 'duy-heard', 'phuc-speech', 'microphone', 'glass'],

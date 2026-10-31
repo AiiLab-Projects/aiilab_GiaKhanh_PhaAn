@@ -162,6 +162,81 @@
     { a: 'number', b: 'khang-pager', title: 'Hồ sơ 13', text: 'Khang lái xe cho Hưng Thịnh, công ty mà loạt bài "Hồ sơ 13" của Minh đang điều tra. Đó là động cơ.' }
   ],
 
+  // Phim tái hiện sau khi phá án (js/engine/replay.js). start: trạng thái đồ vật trước khi vụ án xảy ra
+  replay: {
+    start: [
+      { type: 'body', set: { hidden: true } },
+      { type: 'footprints', set: { hidden: true } },
+      { type: 'papers', i: 1, set: { hidden: true } },
+      { type: 'sheet', set: { hidden: true } },
+      { type: 'text', set: { paintOver: null } },
+      { type: 'chair', set: { fallen: false, X: 4.95, z: 2.95, facing: 'back' } },
+      { type: 'phone', set: { offhook: false } },
+      { type: 'radio', set: { on: false } },
+      { type: 'desk', set: { drawerOpen: false } }
+    ],
+    beats: [
+      {
+        t: '21:00', text: 'Nguyễn Minh ngồi bên bàn làm việc trong phòng 204, viết tiếp loạt bài "Hồ sơ 13" về công ty vận tải Hưng Thịnh. Con số 13 bằng mực đỏ trên tường là ký hiệu riêng của anh.',
+        cast: { victim: { at: [5.2, 3.05], pose: 'sit', face: 'back' } }, cam: { X: 5, z: 2.5, h: 1.1, zoom: 1.5 }
+      },
+      { t: '21:40', place: 'Cổng nhà nghỉ Minh Tân', card: ['khang', 'bao'], clues: ['bao-key'], text: 'Một người đàn ông đi ủng lao động tự xưng là anh họ của Minh, dúi tiền cho bảo vệ Bảo để mượn chìa phụ phòng 204. Anh ta ký sổ bằng một chữ "K.".' },
+      { t: '21:58', place: 'Quán cà phê Thanh Xuân', card: ['khang'], clues: ['receipt'], text: 'Đỗ Khang ngồi bàn 6 quán Thanh Xuân, nhìn sang cửa sổ phòng 204. Trên mặt sau hóa đơn, hắn ghi vội: "204 — chìa phụ".' },
+      {
+        t: '22:08', clues: ['shoe'], text: 'Khang tra chìa phụ vào ổ khóa rồi đi thẳng tới bàn làm việc. Đôi ủng cỡ 41 để lại năm dấu bùn trên sàn. Minh đứng bật dậy.',
+        patch: [{ type: 'door', set: { open: true } }, { type: 'footprints', set: { hidden: false }, after: 2.4 }],
+        cast: {
+          khang: { at: [6.2, 0.55], path: [[6.0, 1.2], [4.6, 2.05]], face: 'front', speed: 1.0, delay: 0.5 },
+          victim: { then: { delay: 2.6, pose: 'stand', at: [4.35, 3.2], face: 'back' } }
+        }
+      },
+      {
+        t: '22:10', clues: ['victim', 'hanh-sound', 'quan-autopsy'], fx: 'flash', fxAt: 1.6,
+        text: 'Khang dùng tay phải khóa chặt cổ tay trái của Minh rồi làm ngạt anh. Chiếc ghế đổ xuống sàn. Lê Hạnh ở phòng 304 ngay phía trên nghe tiếng giằng co, rồi mọi thứ im bặt.',
+        patch: [{ type: 'chair', set: { fallen: true, X: 4.25, z: 3.05, facing: null }, after: 1.6 }],
+        cast: { khang: { path: [[4.1, 2.75]], face: 'front', speed: 1.4 }, victim: { then: { delay: 1.6, pose: 'body', at: [2.5, 3.05], dir: 'right' } } },
+        cam: { X: 3.8, z: 3, h: 0.7, zoom: 1.6 }
+      },
+      {
+        t: '22:15', text: 'Hắn lục ngăn kéo, vơ hết tài liệu về Hưng Thịnh. Vài trang rơi vương xuống sàn cạnh thi thể.',
+        patch: [{ type: 'desk', set: { drawerOpen: true }, after: 2 }, { type: 'papers', i: 1, set: { hidden: false }, after: 3 }],
+        cast: { khang: { path: [[4.5, 2.05], [5.6, 2.05]], face: 'front' } }, cam: { X: 5.3, z: 2.4, h: 1, zoom: 1.5 }
+      },
+      {
+        t: '22:20', clues: ['number'], text: 'Thấy con số 13 trên tường, Khang quét sơn lên che đi. Lớp sơn vội vàng không phủ kín.',
+        patch: [{ type: 'text', set: { paintOver: '#41504a' }, after: 2.6 }],
+        cast: { khang: { path: [[4.7, 1.0]], face: 'back' } }, cam: { X: 4.6, z: 0.6, h: 1.3, zoom: 1.7 }
+      },
+      {
+        t: '22:24', clues: ['radio'], text: 'Hắn vặn radio hẹn giờ tự bật lúc 23:17, để căn phòng có tiếng động khi người khác tới. Nửa tờ hóa đơn quán Thanh Xuân rơi lại trên bàn.',
+        patch: [{ type: 'sheet', set: { hidden: false }, after: 2.4 }],
+        cast: { khang: { path: [[5.4, 2.05]], face: 'front' } }, cam: { X: 5.4, z: 2.4, h: 1, zoom: 1.7 }
+      },
+      {
+        t: '22:31', clues: ['phone', 'khang-pager'], text: 'Khang nhấc điện thoại của Minh, gọi tới máy nhắn tin của chính mình trong 13 giây. Hắn dựng chứng cứ giả rằng lúc 22:31 Minh vẫn còn sống.',
+        patch: [{ type: 'phone', set: { offhook: true }, after: 1.2 }],
+        cast: { khang: { path: [[5.0, 2.05]], face: 'front' } }, cam: { X: 5, z: 2.4, h: 1, zoom: 1.7 }
+      },
+      {
+        t: '22:38', clues: ['door'], text: 'Hắn bước ra, khóa cửa từ bên ngoài bằng chìa phụ, rồi 22:40 trả chìa cho bảo vệ. Căn phòng "khóa trái" trong khi chìa chính vẫn nằm trong túi áo Minh.',
+        patch: [{ type: 'door', set: { open: false }, after: 2.6 }],
+        cast: { khang: { path: [[6.0, 1.3], [6.2, 0.55]], then: { hide: true, delay: 0.3 } } }
+      },
+      {
+        t: '22:46', text: 'Khang quay lại, "phát hiện" thi thể và gọi báo án. Vai người báo án vô can là do chính hắn dựng nên.',
+        patch: [{ type: 'door', set: { open: true } }],
+        cast: { khang: { at: [6.2, 0.55], path: [[5.9, 1.6]], face: 'left', delay: 0.4 } }
+      },
+      {
+        t: '23:17', text: 'Radio tự bật như đã hẹn giờ. Nhưng Lê Hạnh nhớ rõ: khoảng 22:10 có tiếng ghế đổ, sau đó im lặng hoàn toàn. Thời điểm tử vong không thể bị dời đi.',
+        patch: [{ type: 'radio', set: { on: true }, after: 0.8 }],
+        cam: { X: 5.45, z: 2.4, h: 0.9, zoom: 1.8 }
+      }
+    ]
+  },
+
+  meta: { title: "Bản sao số 1", fragment: "Trong tập tài liệu Khang lấy lại có một bìa cứng ghi \"HỒ SƠ 13 — bản 1/3\". Bên trong trống rỗng: ai đó đã rút ruột trước cả Khang. Còn cuộc gọi cho bác sĩ Quân lúc 22:52 đi ra từ một máy lẻ nội bộ có số 13." },
+
   solution: {
     culprit: 'khang',
     evidence: ['bao-key', 'khang-pager', 'shoe', 'receipt', 'door', 'hanh-sound', 'radio', 'number'],
