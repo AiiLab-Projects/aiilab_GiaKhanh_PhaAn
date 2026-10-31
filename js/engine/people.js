@@ -173,8 +173,44 @@
 
   // ---------- Chân dung thẩm vấn 64x64 ----------
   const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map(v => (v + 0.5) / 16);
+  // Ảnh chân dung thật (cắt từ phim tái hiện): look.photo = 'img/faces/…jpg'
+  const PHOTOS = {};
+  function photoOf(src) {
+    if (!PHOTOS[src]) { const img = new Image(); img.src = src; PHOTOS[src] = img; }
+    return PHOTOS[src];
+  }
+  function drawPhoto(canvas, img, mood) {
+    const S = 192;
+    canvas.width = S; canvas.height = S;
+    canvas.classList.add('art-img');
+    const c = canvas.getContext('2d');
+    const k = Math.max(S / img.naturalWidth, S / img.naturalHeight);
+    const w = img.naturalWidth * k, h = img.naturalHeight * k;
+    c.filter = mood === 'angry' ? 'contrast(1.15) saturate(1.1)' : mood === 'nervous' ? 'saturate(.8) brightness(.95)' : 'none';
+    c.drawImage(img, (S - w) / 2, (S - h) / 2, w, h);
+    c.filter = 'none';
+    // Sắc thái tâm trạng: căng thẳng ám lạnh, tức giận ám đỏ
+    if (mood === 'nervous' || mood === 'angry') {
+      const g = c.createRadialGradient(S / 2, S / 2, S * 0.3, S / 2, S / 2, S * 0.75);
+      g.addColorStop(0, 'rgba(0,0,0,0)');
+      g.addColorStop(1, mood === 'angry' ? 'rgba(150,20,20,.55)' : 'rgba(30,60,110,.45)');
+      c.fillStyle = g; c.fillRect(0, 0, S, S);
+    }
+  }
+
   // bg (tuỳ chọn): màu nền sáng cho giao diện; mặc định là nền phòng thẩm vấn tối
   function portrait(canvas, l, mood, bg) {
+    if (l && l.photo) {
+      const img = photoOf(l.photo);
+      const req = canvas._photoReq = {};
+      if (img.complete && img.naturalWidth) return drawPhoto(canvas, img, mood);
+      portrait(canvas, Object.assign({}, l, { photo: null }), mood, bg);
+      canvas._photoReq = req;
+      if (!img.complete) img.addEventListener('load', () => { if (canvas._photoReq === req) drawPhoto(canvas, img, mood); }, { once: true });
+      return;
+    }
+    canvas._photoReq = null;
+    canvas.classList.remove('art-img');
     const L = look(l);
     canvas.width = 64; canvas.height = 64;
     const c = canvas.getContext('2d');
