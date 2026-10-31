@@ -133,6 +133,7 @@
         <div class="rp-stage">
           <div class="rp-world"><canvas aria-hidden="true"></canvas><div class="rp-tags"></div></div>
           <video class="rp-video hidden" muted playsinline preload="auto" aria-hidden="true"></video>
+          <img class="rp-still hidden" alt="" aria-hidden="true">
           <div class="rp-flashfx"></div>
           <div class="rp-card hidden"></div>
           <div class="rp-title hidden">
@@ -232,6 +233,19 @@
       drawChrome(b);
       stage.classList.toggle('dark', !!b.dark);
       showVideo(b);
+      showStill(b);
+    }
+
+    // Vụ có clip quay thật: mở đầu và kết phim dùng ảnh hiện trường bán thực tế, không dùng cảnh pixel
+    const still = $('.rp-still');
+    const filmed = !!(c.replay && c.replay.beats.some(b => b.video));
+    function showStill(b) {
+      const src = filmed && !b.video && (b.kind === 'title' || b.kind === 'end') && c.art && c.art.src;
+      still.classList.toggle('hidden', !src);
+      if (!src) return;
+      if (still.getAttribute('src') !== src) still.src = src;
+      still.onerror = () => { still.classList.add('hidden'); stage.classList.remove('filmed'); };
+      stage.classList.add('filmed');
     }
 
     // Khoảnh khắc có video quay sẵn (Gemini/Veo): phát đè lên cảnh pixel, độ dài theo clip

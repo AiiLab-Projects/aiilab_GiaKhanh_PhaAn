@@ -221,7 +221,7 @@
     beats: [
       { t: '22:30', video: 'video/08-2230.mp4', place: 'Sảnh tòa nhà Phòng hồ sơ đặc biệt', card: ['liem'], text: 'Trưởng phòng Đoàn Minh Liêm chào bảo vệ, chúc mừng năm mới và ra về. Trong cặp của ông là chìa tổng của mọi căn phòng.' },
       {
-        t: '22:40', clues: ['binh-left'], text: 'Trên tầng 3, bà Lan pha trà cho Lê Bình rồi hẹn anh 23:30 quay lại: "Chỉ còn một chữ ký phải đối chiếu."',
+        t: '22:40', video: 'video/08-2240.mp4', clues: ['binh-left'], text: 'Trên tầng 3, bà Lan pha trà cho Lê Bình rồi hẹn anh 23:30 quay lại: "Chỉ còn một chữ ký phải đối chiếu."',
         patch: [{ type: 'clock', set: { time: '22:40' } }],
         cast: {
           victim: { at: [1.2, 1.0], pose: 'sit', face: 'front' },
@@ -230,7 +230,7 @@
         cam: { X: 1.8, z: 1.5, h: 1, zoom: 1.35 }
       },
       {
-        t: '22:55', clues: ['door', 'guardlog'], text: 'Liêm quay lại, nói với bảo vệ là "quên cặp". Hắn mở cửa phòng lưu trữ bằng chìa tổng. Bà Lan không ngạc nhiên — bà đang chờ đúng người này.',
+        t: '22:55', video: 'video/08-2255.mp4', clues: ['door', 'guardlog'], text: 'Liêm quay lại, nói với bảo vệ là "quên cặp". Hắn mở cửa phòng lưu trữ bằng chìa tổng. Bà Lan không ngạc nhiên — bà đang chờ đúng người này.',
         patch: [{ type: 'clock', set: { time: '22:55' } }],
         cast: {
           victim: { at: [1.2, 1.0], pose: 'stand', path: [[1.6, 2.1]], delay: 3, face: 'right' },
@@ -239,7 +239,7 @@
         cam: { X: 2.8, z: 2.0, h: 1, zoom: 1.3 }
       },
       {
-        t: '22:58', clues: ['inhaler', 'lan-asthma'], text: 'Trong lúc bà Lan trải bảng ghim chỉ đỏ ra trước mặt hắn, Liêm lén nhỏ một giọt keo vào vòi bình xịt hen đặt trên bàn.',
+        t: '22:58', video: 'video/08-2258.mp4', clues: ['inhaler', 'lan-asthma'], text: 'Trong lúc bà Lan trải bảng ghim chỉ đỏ ra trước mặt hắn, Liêm lén nhỏ một giọt keo vào vòi bình xịt hen đặt trên bàn.',
         patch: [{ type: 'clock', set: { time: '22:58' } }],
         cast: {
           victim: { at: [1.6, 2.1], path: [[2.35, 0.75]], face: 'back' },
