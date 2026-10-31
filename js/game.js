@@ -20,7 +20,11 @@
     try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* chế độ riêng tư: bỏ qua */ }
   }
   function progress(c) {
-    const p = state.cases[c.id] = Object.assign({ found: [], deductions: [], notes: '', attempts: 0, solved: false, stress: {}, log: [], dialog: {}, spent: 0, broken: {}, tl: {}, timeline: false, ending: null }, state.cases[c.id]);
+    // Luôn trả về CÙNG một object: nếu mỗi lần gọi lại tạo bản sao mới, những chỗ còn giữ bản cũ
+    // (dòng thời gian, buộc tội) gán timeline/solved vào bản cũ và save() làm mất thay đổi đó.
+    const p = state.cases[c.id] = state.cases[c.id] || {};
+    const d = { found: [], deductions: [], notes: '', attempts: 0, solved: false, stress: {}, log: [], dialog: {}, spent: 0, broken: {}, tl: {}, timeline: false, ending: null };
+    for (const k in d) if (p[k] === undefined) p[k] = d[k];
     p.stress = p.stress || {}; p.dialog = p.dialog || {}; p.broken = p.broken || {}; p.tl = p.tl || {}; p.spent = p.spent || 0;
     if (p.ending === 'escape') p.ending = null; // đã bỏ đồng hồ điều tra: mở lại các ván từng hết giờ
     return p;
@@ -1208,7 +1212,7 @@
         p.timeline = true;
         p.log.push({ t: now(), text: 'Dựng xong dòng thời gian' });
         save(); renderSteps(); renderDrawer();
-        toast('<b>Dòng thời gian hoàn chỉnh</b> Đã đủ điều kiện xin lệnh bắt', 'ded');
+        toast('<b>Dòng thời gian hoàn chỉnh</b> Các mốc giờ đã khớp với chứng cứ', 'ded');
       } else {
         msg.textContent = `Mới khớp ${ok}/${T.slots.length} mốc. Có sự kiện đang nằm sai giờ.`;
         box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
@@ -1260,7 +1264,6 @@
           <p class="charge-sub">Chọn tối đa 3 thẻ trong túi chứng cứ. Cần đúng hung thủ và ít nhất 2 chứng cứ then chốt.</p>
           <div class="ev-slots"></div>
           <div class="result-box hidden"></div>
-          ${c.timeline && !p.timeline ? '<p class="need-timeline">Viện kiểm sát cần một <b>dòng thời gian</b> hoàn chỉnh trước khi phê chuẩn lệnh bắt. Dựng nó ở bước <a href="#/ho-so/' + c.id + '/board">Suy luận</a>.</p>' : ''}
           <button class="primary-button big accuse" disabled>Buộc tội <span>→</span></button>
           <small class="attempts">Lần buộc tội sai: ${p.attempts} (mỗi lần trừ 10 điểm)</small>
         </section>
@@ -1274,7 +1277,7 @@
         return cl ? `<button class="ev-slot filled ${cl.kind}" data-id="${cl.id}"><small>${cl.kind === 'loi' ? 'Lời khai' : 'Vật chứng'}</small><strong>${esc(cl.label)}</strong><em>Bấm để bỏ</em></button>` : `<div class="ev-slot"><small>Chứng cứ ${i + 1}</small><strong>Chọn trong túi ↓</strong></div>`;
       }).join('');
       $$('.ev-slot.filled', el).forEach(b => b.onclick = () => current.onPick(b.dataset.id));
-      $('.accuse', el).disabled = !(culprit && current.chosen.length) || !!(c.timeline && !p.timeline);
+      $('.accuse', el).disabled = !culprit; // luôn cho buộc tội; đúng hay sai do hung thủ và chứng cứ quyết định
     }
     $$('.person', el).forEach(b => {
       PixelPeople.portrait($('canvas', b), c.suspects.find(s => s.id === b.dataset.id).look, 'neutral', PORTRAIT_BG);
@@ -1324,7 +1327,7 @@
       else msg = 'Có thể bạn đã chỉ đúng người, nhưng chứng cứ chưa đủ để buộc tội. Chọn những chứng cứ phá được ngoại phạm hoặc chứng minh động cơ.';
       if (missing > 0) msg += ` Gợi ý: còn ${missing} suy luận chưa mở.`;
       res.className = 'result-box wrong';
-      res.textContent = msg;
+      res.textContent = 'Buộc tội sai. ' + msg;
     };
   }
 
