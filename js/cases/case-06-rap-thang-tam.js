@@ -101,7 +101,7 @@
   suspects: [
     {
       id: 'tam', name: 'Phan Minh Tâm', role: 'soát vé, học việc phòng máy',
-      look: { skin: '#c49a7c', hair: '#141012', hairStyle: 'short', coat: '#7a2a2a', shirt: '#d8cfb8', pants: '#24242a' },
+      look: { photo: 'img/faces/06-tam.jpg', skin: '#c49a7c', hair: '#141012', hairStyle: 'short', coat: '#7a2a2a', shirt: '#d8cfb8', pants: '#24242a' },
       intro: 'Em đứng cửa soát vé suốt buổi. Màn ảnh trắng em mới biết có chuyện.',
       alibi: 'Từ 21:00 em ở cửa soát vé. Khách vào muộn nhiều lắm, em không rời đi được.',
       motive: 'Chú Đạt dạy nghề cho em. Chú như bố em vậy.',
@@ -122,7 +122,7 @@
     },
     {
       id: 'huong', name: 'Bà Mai Hương', role: 'quản lý rạp',
-      look: { skin: '#c9a084', hair: '#2a2020', hairStyle: 'bun', coat: '#4a3a5a', shirt: '#e0d6c0', pants: '#2a2a30', earrings: '#d8b860' },
+      look: { photo: 'img/faces/06-huong.jpg', skin: '#c9a084', hair: '#2a2020', hairStyle: 'bun', coat: '#4a3a5a', shirt: '#e0d6c0', pants: '#2a2a30', earrings: '#d8b860' },
       intro: 'Rạp này tôi giữ hai mươi năm. Ông Đạt mất, tôi mất người cuối cùng còn biết chiếu phim nhựa.',
       alibi: 'Tôi ngồi phòng vé đối sổ. 22:00 gọi bộ đàm cho Hiển, 22:10 ra sảnh, 22:25 màn ảnh trắng thì chạy lên.',
       motive: 'Ông Đạt cãi tôi chuyện bán rạp cho công ty Hưng Thịnh. Nhưng cãi nhau thì có gì lạ.',
@@ -137,7 +137,7 @@
     },
     {
       id: 'hien', name: 'Đỗ Hiển', role: 'thợ điện của rạp',
-      look: { skin: '#a8805f', hair: '#2a2420', hairStyle: 'short', coat: '#4a5a6a', shirt: '#c9c0aa', pants: '#2a2622', apron: '#3a3a3a' },
+      look: { photo: 'img/faces/06-hien.jpg', skin: '#a8805f', hair: '#2a2420', hairStyle: 'short', coat: '#4a5a6a', shirt: '#c9c0aa', pants: '#2a2622', apron: '#3a3a3a' },
       intro: 'Tôi ở dưới hầm điện cả tối. Máy phát dở chứng từ chiều.',
       alibi: 'Hầm điện, 21:30 đến 22:30. Chị Hương gọi bộ đàm lúc 22:00, tôi trả lời ngay.',
       motive: 'Tôi nợ ông Đạt hai triệu, nhưng ông ấy chưa đòi bao giờ.',
@@ -156,7 +156,7 @@
     },
     {
       id: 'kieu', name: 'Ông Kiều', role: 'khán giả quen, ghế số 13',
-      look: { skin: '#c49a7c', hair: '#d8d4cc', hairStyle: 'side', coat: '#5a5040', shirt: '#d8d0bc', pants: '#3a342c', glasses: true, hat: true, hatColor: '#3a3028' },
+      look: { photo: 'img/faces/06-kieu.jpg', skin: '#c49a7c', hair: '#d8d4cc', hairStyle: 'side', coat: '#5a5040', shirt: '#d8d0bc', pants: '#3a342c', glasses: true, hat: true, hatColor: '#3a3028' },
       intro: 'Hai mươi năm tôi ngồi ghế 13. Tối nay tôi đến vì rạp hứa chiếu lại cuộn phóng sự cũ trước phim.',
       alibi: 'Tôi ngồi ghế của tôi từ đầu đến cuối. Già rồi, đi đâu được.',
       motive: 'Tôi là kỹ sư cầu đường về hưu. Ông Đạt là người duy nhất còn giữ phim về cây cầu tôi từng làm.',

@@ -100,7 +100,7 @@
   suspects: [
     {
       id: 'liem', name: 'Đoàn Minh Liêm', role: 'trưởng phòng hồ sơ đặc biệt',
-      look: { skin: '#c49a7c', hair: '#4a4440', hairStyle: 'side', coat: '#3a3a40', shirt: '#e0dcd0', pants: '#2a2a30', tie: '#3a2a4a', glasses: true, longCoat: true },
+      look: { photo: 'img/faces/08-liem.jpg', skin: '#c49a7c', hair: '#4a4440', hairStyle: 'side', coat: '#3a3a40', shirt: '#e0dcd0', pants: '#2a2a30', tie: '#3a2a4a', glasses: true, longCoat: true },
       intro: 'Cậu là điều tra viên giỏi nhất của tôi. Đừng để cảm xúc dắt mũi, bà Lan đã già và bệnh.',
       alibi: 'Tôi về từ 22:30, giao thừa ở nhà với vợ con.',
       motive: 'Bà Lan là đồng nghiệp ba mươi năm. Tôi rất kính trọng bà ấy.',
@@ -123,7 +123,7 @@
     },
     {
       id: 'quan', name: 'Phạm Quân', role: 'bác sĩ trực bệnh viện quận',
-      look: { skin: '#c79e83', hair: '#3a3436', hairStyle: 'side', coat: '#dedbd2', shirt: '#9ab0c0', pants: '#3a3d44', glasses: true },
+      look: { photo: 'img/faces/08-quan.jpg', skin: '#c79e83', hair: '#3a3436', hairStyle: 'side', coat: '#dedbd2', shirt: '#9ab0c0', pants: '#3a3d44', glasses: true },
       intro: 'Tôi chỉ làm đúng chuyên môn. Đột quỵ ở tuổi bà ấy không hiếm.',
       alibi: 'Tôi trực ở bệnh viện đến 23:00, rồi đến đây.',
       motive: 'Tôi gần như không quen bà Lan.',
@@ -141,7 +141,7 @@
     },
     {
       id: 'binh', name: 'Lê Bình', role: 'phóng viên điều tra báo Tiếng Phố',
-      look: { skin: '#c9a084', hair: '#211a1a', hairStyle: 'side', coat: '#5a5a3a', shirt: '#d8d0bc', pants: '#2e2e30', glasses: true },
+      look: { photo: 'img/faces/08-binh.jpg', skin: '#c9a084', hair: '#211a1a', hairStyle: 'side', coat: '#5a5a3a', shirt: '#d8d0bc', pants: '#2e2e30', glasses: true },
       intro: 'Bà Lan là nguồn tin của tôi. Tôi là người cuối cùng thấy bà còn sống, tôi biết các anh nghi tôi.',
       alibi: '22:40 tôi ra về, ngồi quán cà phê đầu phố chờ đến 23:30.',
       motive: 'Bà Lan định đưa tôi bản gốc Hồ sơ 13. Giết bà thì tôi được gì?',
@@ -160,7 +160,7 @@
     },
     {
       id: 'bao', name: 'Trịnh Bảo', role: 'phó giám đốc Hưng Thịnh (đang tại ngoại)',
-      look: { skin: '#c9a084', hair: '#141012', hairStyle: 'slick', coat: '#2a2a34', shirt: '#e0dcd0', pants: '#24242a', tie: '#7a2a2a', glasses: true },
+      look: { photo: 'img/faces/bao.jpg', skin: '#c9a084', hair: '#141012', hairStyle: 'slick', coat: '#2a2a34', shirt: '#e0dcd0', pants: '#24242a', tie: '#7a2a2a', glasses: true },
       intro: 'Tôi đến đây để đầu thú, không phải để giết ai. Tôi đợi ở sảnh từ 23:00.',
       alibi: 'Tôi ngồi sảnh tầng 1 từ 23:00, bảo vệ thấy tôi.',
       motive: 'Bà Lan giữ chứng cứ chống lại công ty tôi. Nhưng tôi đã quyết định khai hết.',

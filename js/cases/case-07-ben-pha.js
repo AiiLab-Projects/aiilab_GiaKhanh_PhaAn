@@ -96,7 +96,7 @@
   suspects: [
     {
       id: 'hai', name: 'Tư Hải', role: 'chủ phà Vạn Phúc',
-      look: { skin: '#a07858', hair: '#3a3430', hairStyle: 'short', coat: '#3a4a3a', shirt: '#c9c0aa', pants: '#2a2a2a', hat: true, hatColor: '#c8b078' },
+      look: { photo: 'img/faces/07-hai.jpg', skin: '#a07858', hair: '#3a3430', hairStyle: 'short', coat: '#3a4a3a', shirt: '#c9c0aa', pants: '#2a2a2a', hat: true, hatColor: '#c8b078' },
       intro: 'Tôi chạy phà ba mươi năm. Người say rượu trượt chân xuống sông, năm nào chẳng có.',
       alibi: 'Chuyến cuối 22:00. Neo phà xong tôi về nhà ngủ, vợ tôi biết.',
       motive: 'Tôi chẳng quen ông kỹ sư nào. Ông ấy thỉnh thoảng đi phà, thế thôi.',
@@ -118,7 +118,7 @@
     },
     {
       id: 'bao', name: 'Trịnh Bảo', role: 'phó giám đốc công ty Hưng Thịnh',
-      look: { skin: '#c9a084', hair: '#141012', hairStyle: 'slick', coat: '#2a2a34', shirt: '#e0dcd0', pants: '#24242a', tie: '#7a2a2a', glasses: true },
+      look: { photo: 'img/faces/bao.jpg', skin: '#c9a084', hair: '#141012', hairStyle: 'slick', coat: '#2a2a34', shirt: '#e0dcd0', pants: '#24242a', tie: '#7a2a2a', glasses: true },
       intro: 'Công ty chúng tôi là nhà thầu trụ cầu. Kỹ sư Sơn là đối tác, chúng tôi rất tiếc.',
       alibi: '21:30 tài xế đưa tôi về khách sạn Bến Thành. Lễ tân thấy tôi lên phòng.',
       motive: 'Báo cáo của Sơn có vài số liệu cần trao đổi lại. Chuyện kỹ thuật thôi.',
@@ -137,7 +137,7 @@
     },
     {
       id: 'nam', name: 'Bà Năm', role: 'bán vé bến phà',
-      look: { skin: '#b98e70', hair: '#8a8480', hairStyle: 'bun', coat: '#6a5a4a', shirt: '#d8cfb8', pants: '#2a2a30', scarf: '#4a6a5a' },
+      look: { photo: 'img/faces/07-nam.jpg', skin: '#b98e70', hair: '#8a8480', hairStyle: 'bun', coat: '#6a5a4a', shirt: '#d8cfb8', pants: '#2a2a30', scarf: '#4a6a5a' },
       intro: 'Tôi bán vé ở bến này hai mươi năm. Nhà tôi ngay cạnh chòi vé.',
       alibi: 'Tôi ngủ ở nhà, dậy lúc 23:30 đóng cửa vì gió.',
       motive: 'Kỹ sư Sơn tốt bụng lắm, hay mua bánh cho cháu tôi.',
@@ -150,7 +150,7 @@
     },
     {
       id: 'cuong', name: 'Lê Cường', role: 'phụ phà, cháu Tư Hải',
-      look: { skin: '#b08a6c', hair: '#1c1616', hairStyle: 'short', coat: '#5a6a7a', shirt: '#d0c8b4', pants: '#2a2622' },
+      look: { photo: 'img/faces/07-cuong.jpg', skin: '#b08a6c', hair: '#1c1616', hairStyle: 'short', coat: '#5a6a7a', shirt: '#d0c8b4', pants: '#2a2622' },
       intro: 'Cháu làm phụ phà cho chú Hải hai năm rồi.',
       alibi: 'Cháu về nhà lúc 22:15, mẹ cháu biết.',
       motive: 'Cháu không biết ông kỹ sư.',
