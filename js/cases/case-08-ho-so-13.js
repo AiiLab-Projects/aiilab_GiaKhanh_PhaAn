@@ -224,7 +224,7 @@
       { type: 'clock', set: { time: '22:30' } }
     ],
     beats: [
-      { t: '22:30', place: 'Sảnh tòa nhà Phòng hồ sơ đặc biệt', card: ['liem'], text: 'Trưởng phòng Đoàn Minh Liêm chào bảo vệ, chúc mừng năm mới và ra về. Trong cặp của ông là chìa tổng của mọi căn phòng.' },
+      { t: '22:30', video: 'video/08-2230.mp4', place: 'Sảnh tòa nhà Phòng hồ sơ đặc biệt', card: ['liem'], text: 'Trưởng phòng Đoàn Minh Liêm chào bảo vệ, chúc mừng năm mới và ra về. Trong cặp của ông là chìa tổng của mọi căn phòng.' },
       {
         t: '22:40', clues: ['binh-left'], text: 'Trên tầng 3, bà Lan pha trà cho Lê Bình rồi hẹn anh 23:30 quay lại: "Chỉ còn một chữ ký phải đối chiếu."',
         patch: [{ type: 'clock', set: { time: '22:40' } }],

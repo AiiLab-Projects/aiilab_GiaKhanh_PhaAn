@@ -179,23 +179,42 @@
     if (!PHOTOS[src]) { const img = new Image(); img.src = src; PHOTOS[src] = img; }
     return PHOTOS[src];
   }
-  function drawPhoto(canvas, img, mood) {
-    const S = 192;
-    canvas.width = S; canvas.height = S;
+  function drawPhoto(canvas, img, mood, W = 192, H = W) {
+    canvas.width = W; canvas.height = H;
     canvas.classList.add('art-img');
     const c = canvas.getContext('2d');
-    const k = Math.max(S / img.naturalWidth, S / img.naturalHeight);
+    const k = Math.max(W / img.naturalWidth, H / img.naturalHeight);
     const w = img.naturalWidth * k, h = img.naturalHeight * k;
     c.filter = mood === 'angry' ? 'contrast(1.15) saturate(1.1)' : mood === 'nervous' ? 'saturate(.8) brightness(.95)' : 'none';
-    c.drawImage(img, (S - w) / 2, (S - h) / 2, w, h);
+    c.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
     c.filter = 'none';
     // Sắc thái tâm trạng: căng thẳng ám lạnh, tức giận ám đỏ
     if (mood === 'nervous' || mood === 'angry') {
-      const g = c.createRadialGradient(S / 2, S / 2, S * 0.3, S / 2, S / 2, S * 0.75);
+      const R = Math.max(W, H);
+      const g = c.createRadialGradient(W / 2, H / 2, R * 0.3, W / 2, H / 2, R * 0.75);
       g.addColorStop(0, 'rgba(0,0,0,0)');
       g.addColorStop(1, mood === 'angry' ? 'rgba(150,20,20,.55)' : 'rgba(30,60,110,.45)');
-      c.fillStyle = g; c.fillRect(0, 0, S, S);
+      c.fillStyle = g; c.fillRect(0, 0, W, H);
     }
+  }
+  // Ảnh toàn cảnh 16:9 cho màn hình thẩm vấn lớn: img/stage/ cùng tên với img/faces/
+  function stageOf(l) { return l && l.photo ? l.photo.replace('/faces/', '/stage/') : null; }
+  // fail(): gọi khi ảnh không tải được, để vẽ lại phòng thẩm vấn pixel
+  function stagePhoto(canvas, l, mood, fail) {
+    const src = stageOf(l);
+    if (!src) return false;
+    const img = photoOf(src);
+    const req = canvas._photoReq = {};
+    if (img.complete && img.naturalWidth) drawPhoto(canvas, img, mood, 960, 540);
+    else if (img.complete) return false;
+    else {
+      canvas.width = 960; canvas.height = 540;
+      canvas.classList.add('art-img');
+      canvas.getContext('2d').fillRect(0, 0, 960, 540);
+      img.addEventListener('load', () => { if (canvas._photoReq === req) drawPhoto(canvas, img, mood, 960, 540); }, { once: true });
+      img.addEventListener('error', () => { if (canvas._photoReq === req && fail) fail(); }, { once: true });
+    }
+    return true;
   }
 
   // bg (tuỳ chọn): màu nền sáng cho giao diện; mặc định là nền phòng thẩm vấn tối
@@ -299,5 +318,5 @@
     c.putImageData(img, 0, 0);
   }
 
-  global.PixelPeople = { drawPerson, drawLying, drawActor, portrait, DETECTIVE };
+  global.PixelPeople = { drawPerson, drawLying, drawActor, portrait, stagePhoto, DETECTIVE };
 })(window);

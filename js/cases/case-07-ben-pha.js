@@ -265,7 +265,7 @@
         cast: { hai: { path: [[1.2, 0.9]], face: 'back', then: { delay: 2, path: [[2.6, 0.9]], then: { delay: 2, path: [[3.3, 0.85]] } } } }
       },
       {
-        t: '01:00', clues: ['shoes', 'cuong-knot', 'rope'], text: 'Tư Hải xỏ lại đôi giày cho người chết, buộc dây bằng nút thòng lọng đôi theo thói quen, tưới rượu lên áo rồi thả thi thể xuống nước cạnh mố phà. Hắn neo phà bằng đúng cái nút ấy.',
+        t: '01:00', video: 'video/07-0100.mp4', clues: ['shoes', 'cuong-knot', 'rope'], text: 'Tư Hải xỏ lại đôi giày cho người chết, buộc dây bằng nút thòng lọng đôi theo thói quen, tưới rượu lên áo rồi thả thi thể xuống nước cạnh mố phà. Hắn neo phà bằng đúng cái nút ấy.',
         cast: {
           hai: { path: [[3.4, 2.1]], face: 'left', then: { delay: 3, path: [[5.0, 3.4]], then: { hide: true } } },
           victim: { then: { delay: 5, hide: true } }
@@ -273,7 +273,7 @@
         cam: { X: 3.2, z: 2.0, h: 0.6, zoom: 1.5 }
       },
       {
-        t: '05:30', text: 'Rạng sáng, hai ngư dân vớt được kỹ sư Sơn và đặt anh vào khoang phà. Áo nồng mùi rượu. "Say rượu, trượt chân" — đúng như kẻ giết anh mong đợi.',
+        t: '05:30', video: 'video/07-0530.mp4', text: 'Rạng sáng, hai ngư dân vớt được kỹ sư Sơn và đặt anh vào khoang phà. Áo nồng mùi rượu. "Say rượu, trượt chân" — đúng như kẻ giết anh mong đợi.',
         patch: [{ type: 'body', set: { hidden: false }, after: 1.5 }, { type: 'stain', set: { hidden: false }, after: 1.8 }]
       }
     ]
