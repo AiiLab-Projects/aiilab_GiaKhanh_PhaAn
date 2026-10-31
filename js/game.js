@@ -22,6 +22,7 @@
   function progress(c) {
     const p = state.cases[c.id] = Object.assign({ found: [], deductions: [], notes: '', attempts: 0, solved: false, stress: {}, log: [], dialog: {}, spent: 0, broken: {}, tl: {}, timeline: false, ending: null }, state.cases[c.id]);
     p.stress = p.stress || {}; p.dialog = p.dialog || {}; p.broken = p.broken || {}; p.tl = p.tl || {}; p.spent = p.spent || 0;
+    if (p.ending === 'escape') p.ending = null; // đã bỏ đồng hồ điều tra: mở lại các ván từng hết giờ
     return p;
   }
 
@@ -149,7 +150,7 @@
           <div><b>1</b><strong>Khám hiện trường</strong><p>Đi bằng WASD / phím mũi tên hoặc bấm vào sàn. Lại gần chỗ lấp lánh và bấm <kbd>E</kbd>, hoặc bấm thẳng vào đồ vật.</p></div>
           <div><b>2</b><strong>Thẩm vấn</strong><p>Hỏi ngoại phạm, quan hệ, đưa thẻ trong <b>túi chứng cứ</b>. Ở các vụ mới, bấm <b>Đối chất</b> để bắt mâu thuẫn từng câu khai.</p></div>
           <div><b>3</b><strong>Suy luận</strong><p>Ghép hai manh mối để mở suy luận, rồi xếp <b>dòng thời gian</b> cho đúng giờ.</p></div>
-          <div><b>4</b><strong>Buộc tội</strong><p>Chỉ ra hung thủ và ba chứng cứ quyết định. Coi chừng <b>đồng hồ ⏳</b>: hết giờ là hung thủ trốn mất, bắt nhầm thì hồ sơ rẽ sang hướng khác.</p></div>
+          <div><b>4</b><strong>Buộc tội</strong><p>Chỉ ra hung thủ và ba chứng cứ quyết định. Không giới hạn thời gian, nhưng bắt nhầm thì hồ sơ rẽ sang hướng khác.</p></div>
         </div>
         <button class="primary-button big">Bắt đầu <span>→</span></button>
       </div>`);
@@ -169,7 +170,6 @@
     const lk = lockInfo(c);
     if (lk) return { cls: 'locked', text: `Khoá · phá thêm ${lk.need} vụ để mở`, pct: 0 };
     const p = state.cases[c.id];
-    if (p && p.ending === 'escape') return { cls: 'open', text: 'Hung thủ đã trốn · điều tra lại', pct: 0 };
     if (!p || (!p.found.length && !p.solved)) return { cls: 'new', text: 'Chưa mở', pct: 0 };
     if (p.solved) return { cls: 'solved', text: `Đã phá · hạng ${p.rank}`, pct: 100 };
     const pct = Math.round((p.found.length / c.clues.length) * 100);
@@ -349,7 +349,6 @@
           <div class="hud-title"><small>Hồ sơ #${esc(c.number)} · ${esc(c.clock)} · ${esc(c.weather)}</small><strong>${esc(c.title)}</strong></div>
           <nav class="steps" aria-label="Các bước điều tra"></nav>
           <div class="hud-tools">
-            ${c.pressure ? '<div class="hud-clock" title="Thời gian điều tra còn lại trước khi hung thủ kịp trốn"><span>⏳</span><b></b><i><u></u></i></div>' : ''}
             <button class="hud-btn brief" title="Đọc lại hồ sơ vụ án">Hồ sơ</button>
             <button class="hud-btn nb-open" title="Mở sổ tay điều tra">Sổ tay</button>
           </div>
@@ -368,7 +367,6 @@
     $('.nb-open', el).onclick = () => toggleDrawer(true);
     $('.drawer-back', el).onclick = () => toggleDrawer(false);
     renderSteps();
-    renderPressure();
     renderMode();
     if (pendingBrief === c) { pendingBrief = null; briefing(c); }
   }
@@ -395,7 +393,6 @@
     area.innerHTML = '';
     area.className = 'mode-area mode-' + current.tab;
     const p = progress(current.c);
-    if (p.ending === 'escape' && !p.solved) { area.className = 'mode-area mode-conclude'; escapedView(area); renderBag(); return; }
     ({ scene: modeScene, interview: modeInterview, board: modeBoard, conclude: modeAccuse })[current.tab](area);
     renderBag();
     renderDrawer();
@@ -975,7 +972,6 @@
       L.push({ who: 'me', text: q }, { who: 'them', text: a, unlock });
       if (L.length > 60) L.splice(0, L.length - 60);
       save();
-      spend(1);
       drawHead(m); drawRail(); renderSteps(); renderDrawer();
       if (sus().look.photo) drawRoom(m);
       showLine(q, a, unlock, true);
@@ -1047,7 +1043,6 @@
       } else {
         objection(false);
         p.stress[s.id] = Math.max(0, (p.stress[s.id] || 0) - 8);
-        spend(1);
         say(`Câu khai đó mâu thuẫn với ${cl.label}!`, (s.deflect && s.deflect[Math.floor(Math.random() * s.deflect.length)]) || 'Cái đó thì liên quan gì tới điều tôi vừa nói? Anh/chị đang đoán mò.', 'neutral');
       }
     }
@@ -1217,7 +1212,6 @@
       } else {
         msg.textContent = `Mới khớp ${ok}/${T.slots.length} mốc. Có sự kiện đang nằm sai giờ.`;
         box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
-        spend(1);
       }
       draw();
     };
@@ -1225,72 +1219,27 @@
   }
 
   // ---------- Bước 4: buộc tội ----------
-  // ---------- Áp lực thời gian & các kết thúc ----------
-  // Mỗi câu hỏi, mỗi lần đối chất hụt, mỗi lần buộc tội nhầm đều tiêu tốn "giờ điều tra".
-  // Hết giờ: hung thủ trốn thoát (kết thúc xấu), phải điều tra lại từ đầu.
-  const hoursLeft = (c, p) => Math.max(0, c.pressure.budget - p.spent);
-  function renderPressure() {
-    const box = $('.hud-clock');
-    if (!box || !current) return;
-    const { c } = current, p = progress(c), left = hoursLeft(c, p);
-    $('b', box).textContent = p.solved ? 'Đã xong' : left + ' giờ';
-    $('u', box).style.width = (p.solved ? 100 : left / c.pressure.budget * 100) + '%';
-    box.classList.toggle('low', !p.solved && left <= c.pressure.budget * 0.25);
-  }
-  function spend(n) {
-    const { c } = current, p = progress(c);
-    if (!c.pressure || p.solved || p.ending || !n) return;
-    const before = hoursLeft(c, p);
-    p.spent += n; save(); renderPressure();
-    const left = hoursLeft(c, p);
-    (c.pressure.warn || []).forEach(w => { if (before > w.at && left <= w.at) toast(`<b>Còn ${left} giờ</b> ${esc(w.text)}`, 'warn'); });
-    if (left > 0) return;
-    p.ending = 'escape';
-    p.log.push({ t: now(), text: 'Hết thời gian — hung thủ trốn thoát' });
-    save();
-    setTimeout(() => { if (current && current.c === c) { closeModals(); renderMode(); renderSteps(); endingModal(c, 'escape'); } }, 900);
-  }
-  function endingModal(c, kind, who) {
+  // ---------- Kết thúc khi bắt nhầm người ----------
+  function endingModal(c, who) {
     const E = c.endings || {};
-    const cul = c.suspects.find(s => s.id === c.solution.culprit);
-    const wrong = kind === 'wrong' && c.suspects.find(s => s.id === who);
-    const t = kind === 'escape'
-      ? { label: 'Hung thủ trốn thoát', title: 'Hồ sơ nguội lạnh', text: E.escape || 'Bạn đã mất quá nhiều thời gian. Hung thủ kịp tẩu tán chứng cứ và rời khỏi thành phố.', face: cul, mood: 'neutral' }
-      : { label: 'Bắt nhầm người', title: wrong.name + ' bị tạm giam', text: (E.wrong && E.wrong[who]) || E.wrongDefault || 'Người bị bắt có ngoại phạm vững chắc. Viện kiểm sát trả hồ sơ, còn hung thủ thật có thêm thời gian.', face: wrong, mood: 'angry' };
+    const wrong = c.suspects.find(s => s.id === who);
     const el = h(`
-      <div class="ending ending-${kind}">
+      <div class="ending ending-wrong">
         <canvas class="ending-face" width="64" height="64"></canvas>
         <div>
-          <span class="eyebrow">Kết thúc · ${esc(t.label)}</span>
-          <h2>${esc(t.title)}</h2>
-          <p>${esc(t.text)}</p>
-          <div class="closed-actions">${kind === 'escape' ? '<button class="primary-button big again">Điều tra lại từ đầu <span>↺</span></button><button class="ghost-button to-list">Về tủ hồ sơ</button>' : `<button class="primary-button big">Tiếp tục điều tra <span>→</span></button><small class="ending-cost">Mất ${(c.pressure && c.pressure.wrongCost) || 0} giờ điều tra</small>`}</div>
+          <span class="eyebrow">Kết thúc · Bắt nhầm người</span>
+          <h2>${esc(wrong.name)} bị tạm giam</h2>
+          <p>${esc((E.wrong && E.wrong[who]) || E.wrongDefault || 'Người bị bắt có ngoại phạm vững chắc. Viện kiểm sát trả hồ sơ, còn hung thủ thật có thêm thời gian.')}</p>
+          <div class="closed-actions"><button class="primary-button big">Tiếp tục điều tra <span>→</span></button></div>
         </div>
       </div>`);
-    PixelPeople.portrait($('.ending-face', el), t.face.look, t.mood, kind === 'escape' ? '#2a2630' : PORTRAIT_BG);
-    const close = modal(el, { wide: true });
-    const again = $('.again', el);
-    if (again) { again.onclick = () => restartCase(c); $('.to-list', el).onclick = () => go('#/'); }
-    else $('.primary-button', el).onclick = close;
-  }
-  function restartCase(c) {
-    delete state.cases[c.id]; save();
-    current = null; pendingBrief = c;
-    closeModals();
-    if (location.hash === '#/ho-so/' + c.id) route(); else go('#/ho-so/' + c.id);
-  }
-  function escapedView(area) {
-    const { c } = current;
-    const el = h(`<div class="closed"><div class="closed-card escaped"><span class="stamp">Hồ sơ nguội lạnh</span><h2>Hung thủ đã trốn thoát</h2><p>${esc((c.endings && c.endings.escape) || 'Hết thời gian điều tra.')}</p><div class="closed-actions"><button class="primary-button big again">Điều tra lại từ đầu <span>↺</span></button><button class="ghost-button to-list">Về tủ hồ sơ</button></div></div></div>`);
-    area.appendChild(el);
-    $('.again', el).onclick = () => restartCase(c);
-    $('.to-list', el).onclick = () => go('#/');
+    PixelPeople.portrait($('.ending-face', el), wrong.look, 'angry', PORTRAIT_BG);
+    $('.primary-button', el).onclick = modal(el, { wide: true });
   }
 
   function score(c, p, matched) {
     const k = counts();
-    // Vụ có đồng hồ áp lực: còn nhiều giờ thì thưởng thêm
-    const raw = 40 + 10 * matched + 20 * (k.ded / k.dedT) + 10 * (k.clues / k.cluesT) - 10 * p.attempts + (c.pressure ? 10 * hoursLeft(c, p) / c.pressure.budget - 5 : 0);
+    const raw = 40 + 10 * matched + 20 * (k.ded / k.dedT) + 10 * (k.clues / k.cluesT) - 10 * p.attempts;
     const s = Math.max(0, Math.min(100, Math.round(raw)));
     return { s, rank: s >= 90 ? 'S' : s >= 75 ? 'A' : s >= 60 ? 'B' : 'C' };
   }
@@ -1364,8 +1313,7 @@
         p.log.push({ t: now(), text: 'Bắt nhầm: ' + c.suspects.find(s => s.id === culprit).name });
         res.classList.add('hidden');
         $('.attempts', el).textContent = `Lần buộc tội sai: ${p.attempts} (mỗi lần trừ 10 điểm)`;
-        endingModal(c, 'wrong', culprit);
-        spend(c.pressure && c.pressure.wrongCost);
+        endingModal(c, culprit);
         return;
       }
       $('.attempts', el).textContent = `Lần buộc tội sai: ${p.attempts} (mỗi lần trừ 10 điểm)`;

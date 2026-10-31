@@ -201,12 +201,7 @@
     done: 'Bà Lan bị nhốt trong khói từ 23:00. Mười ba phút trước khi cửa bị phá, kẻ nhốt bà đã gọi bác sĩ đến ký giấy chứng tử.'
   },
 
-  pressure: {
-    budget: 50, wrongCost: 10,
-    warn: [{ at: 18, text: 'Trưởng phòng Liêm vừa ký lệnh điều bạn sang hồ sơ khác, hiệu lực từ 0 giờ.' }, { at: 7, text: 'Liêm đã đặt vé chuyến bay đêm đi Singapore.' }]
-  },
   endings: {
-    escape: 'Pháo hoa giao thừa nổ trên sông Hàn. Cùng lúc ấy, chuyến bay đêm đi Singapore cất cánh với một hành khách tên Đoàn Minh Liêm. Sáng mùng một, quyết định giải thể Phòng hồ sơ đặc biệt nằm trên bàn bạn — chữ ký: L.',
     wrong: {
       quan: 'Bác sĩ Quân bị bắt vì ký giấy chứng tử sai. Ông ta im lặng — vì người ra lệnh vẫn đang ký mọi giấy tờ của vụ án này. Trưởng phòng Liêm vỗ vai bạn: "Làm tốt lắm."',
       binh: 'Lê Bình bị bắt — người cuối cùng thấy nạn nhân còn sống. Báo Tiếng Phố mất phóng viên cuối cùng dám viết về Hồ sơ 13. Trưởng phòng Liêm ký lệnh tạm giam rất nhanh.',
