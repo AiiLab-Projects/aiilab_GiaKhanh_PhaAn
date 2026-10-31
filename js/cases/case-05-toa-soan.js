@@ -169,6 +169,72 @@
     { a: 'cabinet', b: 'binh-story', title: 'Ngăn kéo 1997', text: 'Hồ sơ gốc vụ Phú Mỹ trong ngăn "1997" đã bị lấy đi — trong chiếc túi to cô Tư nhìn thấy.' }
   ],
 
+  // Phim tái hiện sau khi phá án (js/engine/replay.js). Tủ hồ sơ thứ 3 đứng giữa phòng cho tới khi bị xô đổ.
+  replay: {
+    start: [
+      { type: 'body', set: { hidden: true } },
+      { type: 'papers', i: 1, set: { hidden: true } },
+      { type: 'footprints', set: { hidden: true } },
+      { type: 'bit', set: { hidden: true } },
+      { type: 'filecab', i: 2, set: { fallen: false, X: 4.3, z: 2.45, sort: 2.95 } }
+    ],
+    beats: [
+      { t: '18:00', place: 'Phòng biên tập', card: ['luc'], clues: ['luc-moved'], text: 'Thợ in Trương Lực chuyển chiếc tủ hồ sơ ra giữa phòng để sửa ống nước. Lúc ấy sàn quanh tủ còn sạch, không có vết kéo lê nào.' },
+      {
+        t: '22:50', clues: ['binh-story'], text: 'Tổng biên tập Quách Vĩnh ngồi gõ máy chữ. Trên bàn ông là bài điều tra của Lê Bình về vụ đất Phú Mỹ, trong đó có tên chồng Hà Uyên.',
+        cast: { victim: { at: [1.17, 2.3], pose: 'sit', face: 'back' } }, cam: { X: 1.2, z: 1.8, h: 1, zoom: 1.7 }
+      },
+      {
+        t: '23:15', clues: ['timecard'], text: 'Hà Uyên dập thẻ ra về lúc 23:15. Trên giấy tờ, chị đã rời tòa soạn.',
+        patch: [{ type: 'door', set: { open: true }, after: 3.2 }, { type: 'door', set: { open: false }, after: 5 }],
+        cast: { uyen: { at: [5.6, 1.4], path: [[6.25, 0.75]], face: 'back', then: { delay: 2.8, hide: true } } },
+        cam: { X: 6.3, z: 0.6, h: 1.2, zoom: 1.7 }
+      },
+      {
+        t: '23:20', clues: ['ribbon'], text: 'Vài phút sau, Uyên quay lại. Ông Vĩnh đưa chị trang đánh máy cuối cùng: yêu cầu chị từ chức trước khi bài lên khuôn. Những dòng đó vẫn còn in trên ruy-băng máy chữ.',
+        patch: [{ type: 'door', set: { open: true } }, { type: 'door', set: { open: false }, after: 3 }],
+        cast: {
+          uyen: { at: [7.2, 0.6], path: [[6.4, 1.6], [2.7, 2.65]], face: 'left', delay: 0.4 },
+          victim: { pose: 'stand', path: [[1.9, 2.7]], face: 'right', delay: 2.4, holding: '#ece6d6' }
+        }
+      },
+      {
+        t: '23:25', clues: ['victim'], fx: 'flash', fxAt: 1.4,
+        text: 'Uyên chộp chặn giấy trên bàn và đánh vào thái dương ông. Ông Vĩnh ngã gục.',
+        cast: {
+          uyen: { path: [[2.75, 2.2], [2.4, 2.6]], face: 'left', speed: 1.6, holding: '#6a6e66' },
+          victim: { holding: null, then: { delay: 1.4, pose: 'body', at: [1.2, 2.95], dir: 'left' } }
+        },
+        cam: { X: 2.2, z: 2.6, h: 1, zoom: 1.5 }
+      },
+      {
+        t: '23:30', clues: ['cabinet', 'ink'], fx: 'shake', fxAt: 5.2,
+        text: 'Chị kéo thi thể tới chân tủ hồ sơ, rồi xô tủ đổ đè lên để dựng một vụ tai nạn. Ngăn "1997" chứa hồ sơ gốc vụ Phú Mỹ bị lấy đi. Hông tủ dính lại một vệt mực in xanh.',
+        patch: [
+          { type: 'filecab', i: 2, set: { fallen: true, X: 4.05, z: 2.92, sort: 3.6 }, after: 5.2 },
+          { type: 'papers', i: 1, set: { hidden: false }, after: 5.4 },
+          { type: 'footprints', set: { hidden: false }, after: 5.4 }
+        ],
+        cast: {
+          victim: { path: [[3.25, 2.95]], speed: 0.5, delay: 0.3 },
+          uyen: { holding: null, path: [[3.4, 2.55], [4.85, 2.35]], speed: 0.55, face: 'left' }
+        },
+        cam: { X: 3.8, z: 2.9, h: 0.9, zoom: 1.35 }
+      },
+      {
+        t: '23:40', clues: ['proof'], text: 'Uyên thay trang nhất bằng một trang quảng cáo rồi ký duyệt bản bông: "H.U. 23:40".',
+        cast: { uyen: { path: [[5.2, 1.9], [3.0, 2.25]], face: 'back' } }, cam: { X: 3, z: 1.7, h: 0.9, zoom: 1.8 }
+      },
+      {
+        t: '00:05', clues: ['heel', 'tu-saw'], text: 'Gần 0:05, chị rời đi bằng cầu thang sau, tập tễnh vì gót giày màu ngà gãy giữa chừng. Cô Tư, nhân viên tạp vụ, nhìn thấy nhưng quá sợ nên không dám lên tiếng.',
+        patch: [{ type: 'bit', set: { hidden: false }, after: 5.4 }],
+        cast: { uyen: { path: [[6.35, 3.75], [8.6, 3.95]], speed: 0.7, limp: true, then: { hide: true } } }
+      }
+    ]
+  },
+
+  meta: { title: "Bản sao số 3", fragment: "Bản thảo ông Vĩnh không chịu rút có tít: \"Ai đang ngồi trên Hồ sơ 13?\" Nguồn tin được ghi bằng bút chì: \"người trong Phòng hồ sơ đặc biệt — bà L.\"" },
+
   solution: {
     culprit: 'uyen',
     evidence: ['timecard', 'proof', 'tu-saw', 'heel', 'ribbon', 'binh-story', 'cabinet', 'victim'],
