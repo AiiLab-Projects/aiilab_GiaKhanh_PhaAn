@@ -977,11 +977,15 @@
       save();
       spend(1);
       drawHead(m); drawRail(); renderSteps(); renderDrawer();
+      if (sus().look.photo) drawRoom(m);
       showLine(q, a, unlock, true);
     }
-    function drawRoom() {
+    // Nghi phạm có ảnh thật thì màn hình lớn hiện ảnh đó; còn lại vẽ phòng thẩm vấn pixel
+    function drawRoom(mood) {
       stopScenes();
-      run(new PixelScene($('.vn-stage canvas', el), interviewSpec(c, sus()), { hint: false }));
+      const cv = $('.vn-stage canvas', el), s = sus();
+      const room = () => { cv._photoReq = null; cv.classList.remove('art-img'); run(new PixelScene(cv, interviewSpec(c, s), { hint: false })); };
+      if (!PixelPeople.stagePhoto(cv, s.look, mood || moodOf(s.id), () => { if (sus() === s) room(); })) room();
     }
     function drawAll() { cross = null; toggleCross(); drawRail(); drawHead(); showLast(); drawRoom(); }
 
